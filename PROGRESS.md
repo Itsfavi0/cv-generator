@@ -9,7 +9,7 @@
 - [x] Modelo, validación, puntaje, almacenamiento, formato y render (`src/js/`)
 - [x] `index.html`, `app.js`, `scripts/serve.js`, `package.json`
 - [x] `git init`, `.gitignore`, `LICENSE` y commit inicial con el código existente
-- [ ] Tests: `tests/format.test.js`, `validation.test.js`, `score.test.js`, `model.test.js`, `storage.test.js`
+- [x] Tests: `tests/format.test.js`, `validation.test.js`, `score.test.js`, `model.test.js`, `storage.test.js`
 - [ ] `src/styles/app.css` (editor, modo claro/oscuro, responsivo, toast, medidor, impresión)
 - [ ] `src/styles/cv.css` (hoja A4 y plantillas Clásica, Moderna y Minimalista)
 - [ ] Verificación manual en el navegador: corregir bugs y que no haya errores en la consola
@@ -22,6 +22,7 @@
 
 - 2026-10-15 — La sesión coordinadora escribió la lógica de `src/js/`, `index.html` y el servidor. Todavía sin ejecutar.
 - 2026-10-15 — `git init` (rama `main`), `.gitignore`, `LICENSE` (MIT) y commit inicial con el código existente.
+- 2026-10-15 — Tests con `node:test` (35 casos: format, validation, score, model, storage). Corregido `npm test`: en Node 24 `node --test tests/` no acepta un directorio; ahora usa el glob `tests/**/*.test.js`.
 
 ## Decisiones
 
