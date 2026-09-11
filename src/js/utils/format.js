@@ -58,7 +58,7 @@ export function slugify(text) {
   return (text ?? '')
     .normalize('NFD')
     // Tras NFD, las tildes quedan como marcas combinantes (U+0300–U+036F) y se eliminan.
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
