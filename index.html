@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Generador de CV</title>
+    <meta name="description" content="Crea tu currículum con vista previa en vivo, plantillas y exportación a PDF." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>" />
+    <script>
+      // Aplica el tema antes de pintar para evitar un parpadeo.
+      try {
+        const saved = localStorage.getItem('cv-generator:theme');
+        if (saved) document.documentElement.dataset.theme = saved;
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="src/styles/app.css" />
+    <link rel="stylesheet" href="src/styles/cv.css" />
+    <script type="module" src="src/js/app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__logo" aria-hidden="true">CV</span>
+        <span class="brand__name">Generador de CV</span>
+      </div>
+      <nav class="topbar__actions" aria-label="Acciones">
+        <button type="button" class="btn btn--ghost" id="btn-sample">Cargar ejemplo</button>
+        <label class="btn btn--ghost">
+          Importar JSON
+          <input type="file" id="input-import" accept="application/json,.json" hidden />
+        </label>
+        <button type="button" class="btn btn--ghost" id="btn-export">Exportar JSON</button>
+        <button type="button" class="btn btn--ghost" id="btn-reset">Reiniciar</button>
+        <button type="button" class="btn btn--icon" id="btn-theme" aria-label="Cambiar tema" title="Cambiar tema">◐</button>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <form class="editor" id="cv-form" novalidate autocomplete="on">
+        <fieldset class="card">
+          <legend class="card__title">Datos personales</legend>
+          <div class="grid-2">
+            <label class="field">
+              <span class="field__label">Nombre completo <abbr title="obligatorio">*</abbr></span>
+              <input name="personal.fullName" autocomplete="name" maxlength="120" />
+              <small class="field__error" data-error-for="personal.fullName"></small>
+            </label>
+            <label class="field">
+              <span class="field__label">Título profesional</span>
+              <input name="personal.title" placeholder="Desarrollador Full-Stack" maxlength="120" />
+            </label>
+            <label class="field">
+              <span class="field__label">Email <abbr title="obligatorio">*</abbr></span>
+              <input name="personal.email" type="email" autocomplete="email" maxlength="120" />
+              <small class="field__error" data-error-for="personal.email"></small>
+            </label>
+            <label class="field">
+              <span class="field__label">Teléfono</span>
+              <input name="personal.phone" type="tel" autocomplete="tel" placeholder="+51 999 999 999" maxlength="120" />
+              <small class="field__error" data-error-for="personal.phone"></small>
+            </label>
+            <label class="field">
+              <span class="field__label">Ubicación</span>
+              <input name="personal.location" placeholder="Ciudad, País" maxlength="120" />
+            </label>
+            <label class="field">
+              <span class="field__label">Web / GitHub / LinkedIn</span>
+              <input name="personal.website" placeholder="github.com/usuario" maxlength="120" />
+              <small class="field__error" data-error-for="personal.website"></small>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend class="card__title">Perfil profesional</legend>
+          <label class="field">
+            <span class="field__label">Resumen</span>
+            <textarea name="summary" rows="4" maxlength="2000" placeholder="Quién eres, qué haces y qué tipo de rol buscas."></textarea>
+            <small class="field__hint"><span id="summary-count">0</span> caracteres · ideal entre 150 y 600</small>
+          </label>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend class="card__title">Experiencia</legend>
+          <div class="entries" id="experience-list" data-list="experience"></div>
+          <button type="button" class="btn btn--dashed" data-add="experience">+ Añadir experiencia</button>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend class="card__title">Educación</legend>
+          <div class="entries" id="education-list" data-list="education"></div>
+          <button type="button" class="btn btn--dashed" data-add="education">+ Añadir educación</button>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend class="card__title">Habilidades</legend>
+          <div class="skill-input">
+            <input id="skill-input" placeholder="Escribe una habilidad y pulsa Enter" maxlength="40" aria-label="Nueva habilidad" />
+            <button type="button" class="btn" id="btn-add-skill">Añadir</button>
+          </div>
+          <ul class="chips" id="skill-list" aria-label="Habilidades añadidas"></ul>
+        </fieldset>
+      </form>
+
+      <section class="preview-pane" aria-label="Vista previa">
+        <div class="preview-toolbar card">
+          <label class="field field--inline">
+            <span class="field__label">Plantilla</span>
+            <select id="select-template"></select>
+          </label>
+          <label class="field field--inline">
+            <span class="field__label">Color</span>
+            <input type="color" id="input-accent" />
+          </label>
+          <button type="button" class="btn btn--primary" id="btn-pdf">Descargar PDF</button>
+        </div>
+
+        <div class="score-card card" id="score-card">
+          <div class="score-card__head">
+            <div class="score-meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-label="Puntaje del CV" id="score-meter">
+              <span id="score-value">0</span>
+            </div>
+            <div>
+              <p class="score-card__label" id="score-label"></p>
+              <p class="score-card__hint">Puntaje según completitud y calidad del contenido</p>
+            </div>
+          </div>
+          <ul class="score-card__tips" id="score-tips"></ul>
+        </div>
+
+        <div class="cv-page" id="cv-preview"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <template id="tpl-experience">
+      <div class="entry">
+        <div class="entry__toolbar">
+          <span class="entry__index"></span>
+          <div class="entry__buttons">
+            <button type="button" class="btn btn--icon btn--sm" data-action="up" aria-label="Subir">↑</button>
+            <button type="button" class="btn btn--icon btn--sm" data-action="down" aria-label="Bajar">↓</button>
+            <button type="button" class="btn btn--icon btn--sm btn--danger" data-action="remove" aria-label="Eliminar">✕</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">Puesto *</span>
+            <input data-field="role" maxlength="120" />
+            <small class="field__error" data-error-field="role"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Empresa *</span>
+            <input data-field="company" maxlength="120" />
+            <small class="field__error" data-error-field="company"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Inicio</span>
+            <input data-field="start" type="month" />
+          </label>
+          <label class="field">
+            <span class="field__label">Fin</span>
+            <input data-field="end" type="month" />
+            <small class="field__error" data-error-field="end"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Ubicación</span>
+            <input data-field="location" maxlength="120" placeholder="Ciudad o Remoto" />
+          </label>
+          <label class="field field--check">
+            <input data-field="current" type="checkbox" />
+            <span>Trabajo aquí actualmente</span>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field__label">Logros y responsabilidades</span>
+          <textarea data-field="description" rows="4" maxlength="2000" placeholder="- Empieza cada línea con un guion para crear viñetas&#10;- Usa números: «reduje los errores un 30 %»"></textarea>
+        </label>
+      </div>
+    </template>
+
+    <template id="tpl-education">
+      <div class="entry">
+        <div class="entry__toolbar">
+          <span class="entry__index"></span>
+          <div class="entry__buttons">
+            <button type="button" class="btn btn--icon btn--sm" data-action="up" aria-label="Subir">↑</button>
+            <button type="button" class="btn btn--icon btn--sm" data-action="down" aria-label="Bajar">↓</button>
+            <button type="button" class="btn btn--icon btn--sm btn--danger" data-action="remove" aria-label="Eliminar">✕</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">Título o carrera *</span>
+            <input data-field="degree" maxlength="120" />
+            <small class="field__error" data-error-field="degree"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Institución *</span>
+            <input data-field="institution" maxlength="120" />
+            <small class="field__error" data-error-field="institution"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Inicio</span>
+            <input data-field="start" type="month" />
+          </label>
+          <label class="field">
+            <span class="field__label">Fin</span>
+            <input data-field="end" type="month" />
+            <small class="field__error" data-error-field="end"></small>
+          </label>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>

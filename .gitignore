@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+.DS_Store
+Thumbs.db
+# Archivos exportados al probar la app
+cv-*.json
+*.pdf
