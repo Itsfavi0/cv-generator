@@ -11,7 +11,7 @@
 - [x] `git init`, `.gitignore`, `LICENSE` y commit inicial con el código existente
 - [x] Tests: `tests/format.test.js`, `validation.test.js`, `score.test.js`, `model.test.js`, `storage.test.js`
 - [x] `src/styles/app.css` (editor, modo claro/oscuro, responsivo, toast, medidor, impresión)
-- [ ] `src/styles/cv.css` (hoja A4 y plantillas Clásica, Moderna y Minimalista)
+- [x] `src/styles/cv.css` (hoja A4 y plantillas Clásica, Moderna y Minimalista)
 - [ ] Verificación manual en el navegador: corregir bugs y que no haya errores en la consola
 - [ ] Verificación a 375 px y en la vista de impresión
 - [ ] `docs/screenshot.png`
@@ -24,6 +24,7 @@
 - 2026-10-15 — `git init` (rama `main`), `.gitignore`, `LICENSE` (MIT) y commit inicial con el código existente.
 - 2026-10-15 — Tests con `node:test` (35 casos: format, validation, score, model, storage). Corregido `npm test`: en Node 24 `node --test tests/` no acepta un directorio; ahora usa el glob `tests/**/*.test.js`.
 - 2026-10-15 — `app.css`: tokens claro/oscuro (sistema + botón ◐), 2 columnas con vista previa sticky, 1 columna bajo 960 px, medidor con conic-gradient, toast e impresión.
+- 2026-10-15 — `cv.css`: hoja A4 siempre blanca y plantillas Clásica, Moderna (barra lateral de acento) y Minimalista (versalitas y "·"); container query para hojas estrechas.
 
 ## Decisiones
 
