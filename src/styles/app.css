@@ -231,6 +231,7 @@ abbr[title] {
 
 .field {
   display: grid;
+  align-content: start;
   gap: 4px;
   min-width: 0;
 }
@@ -241,7 +242,7 @@ abbr[title] {
   color: var(--text-muted);
 }
 
-.field input:not([type='checkbox']):not([type='color']),
+.field input:where(:not([type='checkbox'], [type='color'])),
 .field select,
 .field textarea,
 .skill-input input {
@@ -281,8 +282,8 @@ abbr[title] {
   cursor: not-allowed;
 }
 
-.field [aria-invalid='true'],
-.field [aria-invalid='true']:focus {
+.field :is(input, textarea, select)[aria-invalid='true'],
+.field :is(input, textarea, select)[aria-invalid='true']:focus {
   border-color: var(--danger);
   box-shadow: 0 0 0 3px var(--danger-soft);
 }
@@ -446,7 +447,7 @@ input[type='color'] {
   border-radius: var(--radius-sm);
 }
 
-.entry .field input:not([type='checkbox']),
+.entry .field input:where(:not([type='checkbox'])),
 .entry .field textarea {
   background: var(--surface);
 }
