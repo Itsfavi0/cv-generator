@@ -322,6 +322,9 @@ $('#btn-export').addEventListener('click', () => {
   toast('JSON exportado', 'success');
 });
 
+// Un <input type=file> oculto no recibe foco; el botón visible lo abre y así funciona con teclado.
+$('#btn-import').addEventListener('click', () => $('#input-import').click());
+
 $('#input-import').addEventListener('change', async (event) => {
   const file = event.target.files?.[0];
   event.target.value = '';
