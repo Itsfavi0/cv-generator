@@ -1,0 +1,800 @@
+/* ==========================================================================
+   Editor: tokens, layout, formulario, vista previa, puntaje, toast e impresión.
+   La hoja del CV vive en cv.css y no depende del tema del editor.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --surface-2: #f8f7f4;
+  --border: #e1ddd5;
+  --border-strong: #c9c3b8;
+  --text: #1f1d1a;
+  --text-muted: #6b665d;
+  --primary: #2b4acb;
+  --primary-hover: #213aa6;
+  --primary-text: #ffffff;
+  --primary-soft: #e6eafb;
+  --danger: #c0362c;
+  --danger-soft: #fbe9e7;
+  --success: #1f7a4d;
+  --warning: #b7791f;
+  --focus: #2b4acb;
+  --preview-bg: #e7e3db;
+  --shadow: 0 1px 2px rgb(31 29 26 / 0.06), 0 4px 16px rgb(31 29 26 / 0.06);
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --topbar-h: 60px;
+}
+
+/* El modo oscuro se aplica por preferencia del sistema salvo que el usuario fije "light",
+   o siempre que el usuario elija "dark" con el botón ◐. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #15171c;
+    --surface: #1d2027;
+    --surface-2: #232730;
+    --border: #2e333d;
+    --border-strong: #414855;
+    --text: #e8e6e1;
+    --text-muted: #9a9ea8;
+    --primary: #7f9cff;
+    --primary-hover: #a1b6ff;
+    --primary-text: #0f1220;
+    --primary-soft: #252d4a;
+    --danger: #ff8a80;
+    --danger-soft: #3a2223;
+    --success: #6fd3a0;
+    --warning: #f0b860;
+    --focus: #a1b6ff;
+    --preview-bg: #0f1115;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #15171c;
+  --surface: #1d2027;
+  --surface-2: #232730;
+  --border: #2e333d;
+  --border-strong: #414855;
+  --text: #e8e6e1;
+  --text-muted: #9a9ea8;
+  --primary: #7f9cff;
+  --primary-hover: #a1b6ff;
+  --primary-text: #0f1220;
+  --primary-soft: #252d4a;
+  --danger: #ff8a80;
+  --danger-soft: #3a2223;
+  --success: #6fd3a0;
+  --warning: #f0b860;
+  --focus: #a1b6ff;
+  --preview-bg: #0f1115;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.25);
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 var(--font);
+  overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+abbr[title] {
+  text-decoration: none;
+  color: var(--danger);
+}
+
+/* ---------- Barra superior ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--topbar-h);
+  padding: 8px 24px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.brand__logo {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-text);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.topbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+/* ---------- Layout ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 24px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px;
+  align-items: start;
+}
+
+.editor {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.preview-pane {
+  position: sticky;
+  top: calc(var(--topbar-h) + 16px);
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-height: calc(100vh - var(--topbar-h) - 32px);
+  overflow: auto;
+  padding: 4px;
+  margin: -4px;
+}
+
+/* ---------- Tarjetas ---------- */
+
+.card {
+  margin: 0;
+  padding: 20px;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* El legend de un fieldset se dibuja sobre el borde por defecto; float lo devuelve al flujo. */
+.card__title {
+  float: left;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.card__title + * {
+  clear: both;
+}
+
+/* ---------- Campos ---------- */
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.field input:not([type='checkbox']):not([type='color']),
+.field select,
+.field textarea,
+.skill-input input {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 11px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.field input:hover,
+.field textarea:hover,
+.field select:hover,
+.skill-input input:hover {
+  border-color: var(--border-strong);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.skill-input input:focus {
+  outline: none;
+  background: var(--surface);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.field input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field [aria-invalid='true'],
+.field [aria-invalid='true']:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.field__error {
+  color: var(--danger);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.field__error:empty {
+  display: none;
+}
+
+.field__hint {
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.field--inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field--inline select {
+  width: auto;
+}
+
+.field--check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: end;
+  min-height: 40px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.field--check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--primary);
+}
+
+input[type='color'] {
+  width: 40px;
+  height: 34px;
+  padding: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--border-strong);
+  background: var(--surface);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+
+.btn--ghost:hover {
+  background: var(--surface-2);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn--primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.btn--primary:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn--dashed {
+  width: 100%;
+  margin-top: 12px;
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn--dashed:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.btn--icon {
+  min-width: 38px;
+  padding: 6px;
+  font-size: 16px;
+}
+
+.btn--sm {
+  min-height: 30px;
+  min-width: 30px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ---------- Entradas de experiencia y educación ---------- */
+
+.entries {
+  display: grid;
+  gap: 12px;
+}
+
+.entries:empty {
+  display: none;
+}
+
+.entry {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.entry .field input:not([type='checkbox']),
+.entry .field textarea {
+  background: var(--surface);
+}
+
+.entry__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.entry__index {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.entry__buttons {
+  display: flex;
+  gap: 4px;
+}
+
+/* ---------- Habilidades ---------- */
+
+.skill-input {
+  display: flex;
+  gap: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips:empty {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 3px 4px 3px 11px;
+  background: var(--primary-soft);
+  color: var(--text);
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.chip__remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chip__remove:hover {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+/* ---------- Vista previa ---------- */
+
+.preview-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 12px 16px;
+}
+
+.preview-toolbar .btn--primary {
+  margin-left: auto;
+}
+
+/* ---------- Puntaje ---------- */
+
+.score-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.score-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.score-card__label {
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.score-card__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.score-card__tips {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+}
+
+.score-card__tips li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--text-muted);
+}
+
+.score-card__tips li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}
+
+.score-card__tips li.is-done {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.score-card__tips li.is-done::before {
+  content: '✓';
+  color: var(--success);
+}
+
+.score-meter {
+  --score: 0;
+  --meter-color: var(--danger);
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: conic-gradient(var(--meter-color) calc(var(--score) * 1%), var(--border) 0);
+  font-weight: 750;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.3s;
+}
+
+/* El "hueco" interior convierte el círculo en un anillo. */
+.score-meter::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.score-meter > span {
+  position: relative;
+}
+
+.score-meter[data-level='mid'] {
+  --meter-color: var(--warning);
+}
+
+.score-meter[data-level='high'] {
+  --meter-color: var(--success);
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(480px, calc(100vw - 32px));
+  padding: 12px 18px;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.25);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 16px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.toast[data-type='error'] {
+  background: var(--danger);
+  color: #fff;
+}
+
+.toast[data-type='success'] {
+  background: var(--success);
+  color: #fff;
+}
+
+:root[data-theme='dark'] .toast[data-type],
+:root[data-theme='dark'] .toast[data-type] .toast__action {
+  color: #111;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .toast[data-type],
+  :root:not([data-theme='light']) .toast[data-type] .toast__action {
+    color: #111;
+  }
+}
+
+.toast__action {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-pane {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --topbar-h: auto;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    padding: 8px 16px;
+  }
+
+  .topbar__actions {
+    justify-content: flex-start;
+  }
+
+  .topbar__actions .btn {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .layout {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-toolbar .btn--primary {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Impresión: solo la hoja del CV ---------- */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topbar,
+  .editor,
+  .preview-toolbar,
+  .score-card,
+  .toast {
+    display: none !important;
+  }
+
+  .layout,
+  .preview-pane {
+    display: block;
+    position: static;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
