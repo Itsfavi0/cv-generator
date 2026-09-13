@@ -8,7 +8,7 @@ export const TEMPLATES = [
 
 export const DEFAULT_ACCENT = '#2563eb';
 
-const LIMITS = {
+export const LIMITS = {
   short: 120,
   long: 2000,
   entries: 20,

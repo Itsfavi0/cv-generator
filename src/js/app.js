@@ -1,4 +1,5 @@
 import {
+  LIMITS,
   TEMPLATES,
   addSkill,
   createEducation,
@@ -206,6 +207,11 @@ form.addEventListener('click', (event) => {
   const addButton = event.target.closest('[data-add]');
   if (addButton) {
     const listName = addButton.dataset.add;
+    // Mismo tope que normalizeCV: si no, lo que pase de 20 se perdería al recargar.
+    if (cv[listName].length >= LIMITS.entries) {
+      toast(`Máximo ${LIMITS.entries} entradas por sección.`, 'error');
+      return;
+    }
     const item = FACTORIES[listName]();
     cv[listName].push(item);
     renderEntries(listName);
