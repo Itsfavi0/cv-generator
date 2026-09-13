@@ -716,7 +716,9 @@ input[type='color'] {
     --topbar-h: auto;
   }
 
+  /* En móvil la barra ocupa dos filas: fija robaría demasiado alto a la pantalla. */
   .topbar {
+    position: static;
     flex-wrap: wrap;
     padding: 8px 16px;
   }

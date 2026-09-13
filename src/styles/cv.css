@@ -13,7 +13,6 @@
   max-width: 210mm;
   margin: 0 auto;
   display: flex;
-  aspect-ratio: 210 / 297;
   background: #fff;
   color: var(--cv-ink);
   color-scheme: light;
@@ -22,7 +21,16 @@
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* aspect-ratio funciona como alto mínimo: si el contenido es más largo, la hoja crece. */
+/* Alto mínimo de hoja A4 (proporción 210/297). Un aspect-ratio en el propio contenedor flex
+   lo deja con alto fijo en Chrome y el texto se sale; este "puntal" invisible con padding
+   en % (relativo al ancho) solo fija el mínimo, y la hoja crece si el CV es más largo. */
+.cv-page::before {
+  content: '';
+  flex: none;
+  width: 0;
+  padding-top: calc(100% * 297 / 210);
+}
+
 .cv-page > .cv {
   flex: 1;
   min-width: 0;
@@ -400,8 +408,11 @@
     max-width: none;
     min-height: 297mm;
     margin: 0;
-    aspect-ratio: auto;
     box-shadow: none;
+  }
+
+  .cv-page::before {
+    display: none;
   }
 
   .cv__section-title {
