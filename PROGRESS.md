@@ -14,7 +14,7 @@
 - [x] `src/styles/cv.css` (hoja A4 y plantillas Clásica, Moderna y Minimalista)
 - [x] Verificación manual en el navegador: corregir bugs y que no haya errores en la consola
 - [x] Verificación a 375 px y en la vista de impresión
-- [ ] `docs/screenshot.png`
+- [x] `docs/screenshot.png`
 - [ ] README final
 - [ ] Extras (ver `CLAUDE.md`)
 
@@ -27,6 +27,7 @@
 - 2026-10-15 — `cv.css`: hoja A4 siempre blanca y plantillas Clásica, Moderna (barra lateral de acento) y Minimalista (versalitas y "·"); container query para hojas estrechas.
 - 2026-10-15 — Verificado en el navegador integrado: vista previa en vivo, errores al salir del campo, 3 plantillas, color, ejemplo, importar/exportar JSON (también JSON roto y con HTML), reiniciar, tema claro/oscuro, mover/eliminar entradas, habilidades y bloqueo del PDF con errores. Consola sin errores. Bugs corregidos: `npm test` con directorio, borde rojo que no se veía (especificidad), campos que se estiraban al mostrar un error, "Importar JSON" inaccesible por teclado y entradas por encima de 20 que se perdían al recargar.
 - 2026-10-15 — Verificado a 375 px (sin scroll horizontal) y la impresión con Chrome headless (CDP `Page.printToPDF`): las 3 plantillas salen en 1 página A4 con colores. Corregido: con `aspect-ratio` en un contenedor flex la hoja no crecía y el texto se salía en móvil; ahora un pseudo-elemento fija el alto mínimo. La barra superior deja de ser sticky en móvil.
+- 2026-10-15 — `docs/screenshot.png` (1440×900, modo claro, CV de ejemplo con la plantilla Moderna) generada con Chrome headless vía CDP, porque el pane integrado no siempre pinta cuando la ventana está en segundo plano.
 
 ## Decisiones
 
