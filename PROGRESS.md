@@ -15,7 +15,7 @@
 - [x] Verificación manual en el navegador: corregir bugs y que no haya errores en la consola
 - [x] Verificación a 375 px y en la vista de impresión
 - [x] `docs/screenshot.png`
-- [ ] README final
+- [x] README final
 - [ ] Extras (ver `CLAUDE.md`)
 
 ## Bitácora
@@ -28,12 +28,22 @@
 - 2026-10-15 — Verificado en el navegador integrado: vista previa en vivo, errores al salir del campo, 3 plantillas, color, ejemplo, importar/exportar JSON (también JSON roto y con HTML), reiniciar, tema claro/oscuro, mover/eliminar entradas, habilidades y bloqueo del PDF con errores. Consola sin errores. Bugs corregidos: `npm test` con directorio, borde rojo que no se veía (especificidad), campos que se estiraban al mostrar un error, "Importar JSON" inaccesible por teclado y entradas por encima de 20 que se perdían al recargar.
 - 2026-10-15 — Verificado a 375 px (sin scroll horizontal) y la impresión con Chrome headless (CDP `Page.printToPDF`): las 3 plantillas salen en 1 página A4 con colores. Corregido: con `aspect-ratio` en un contenedor flex la hoja no crecía y el texto se salía en móvil; ahora un pseudo-elemento fija el alto mínimo. La barra superior deja de ser sticky en móvil.
 - 2026-10-15 — `docs/screenshot.png` (1440×900, modo claro, CV de ejemplo con la plantilla Moderna) generada con Chrome headless vía CDP, porque el pane integrado no siempre pinta cuando la ventana está en segundo plano.
+- 2026-10-15 — README final: frase de valor, captura, funcionalidades, stack, uso, tests, estructura, decisiones técnicas e ideas futuras. Decisiones de la noche anotadas en PROGRESS.md.
 
 ## Decisiones
 
 - JavaScript puro en vez de React: el objetivo es dominar el DOM y el estado sin abstracciones.
 - PDF con impresión nativa en vez de jsPDF: el texto queda real y legible para ATS, y no suma dependencias.
 - Todas las plantillas comparten el HTML y se diferencian solo por CSS.
+- `npm test` usa el glob `"tests/**/*.test.js"`: en Node 24, `node --test tests/` falla porque ya no acepta un directorio.
+- Los errores de validación solo se muestran en campos tocados (o todos al pulsar "Descargar PDF"), como ya hacía `app.js`.
+- Alto mínimo A4 con un pseudo-elemento `::before` (`padding-top` proporcional) en vez de `aspect-ratio`: en un contenedor flex, Chrome fijaba el alto y el contenido se salía de la hoja en móvil. El requisito "aspect-ratio como alto mínimo" se cumple con otra técnica.
+- Las plantillas responden al ancho de la hoja con `container-type: inline-size` (en móvil la barra lateral de la Moderna pasa abajo); al imprimir siempre es A4.
+- En la Moderna, la barra lateral usa el acento oscurecido un 18 % (`color-mix`) para que el texto blanco tenga contraste también con colores claros.
+- "Importar JSON" pasó de `<label>` a `<button>` que abre el `<input type=file>` oculto: un label no recibe foco con el teclado.
+- Límite de 20 entradas por sección también en la UI (antes solo en `normalizeCV`, y lo que sobraba se perdía al recargar).
+- En móvil (≤ 640 px) la barra superior no es sticky: ocupa dos filas y robaba demasiada pantalla.
+- La captura y la prueba de impresión se hicieron con Chrome headless vía CDP (script fuera del repo), porque el pane integrado no pinta frames cuando la ventana está en segundo plano. Las pruebas funcionales sí se hicieron en el pane.
 
 ## Bloqueos
 
