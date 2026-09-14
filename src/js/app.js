@@ -285,7 +285,8 @@ $('#input-accent').addEventListener('input', (event) => {
   update();
 });
 
-$('#btn-pdf').addEventListener('click', () => {
+/** Valida y, si no hay errores, abre el diálogo de impresión (desde el botón o con Ctrl+P). */
+function printCV() {
   showAllErrors = true;
   errors = validateCV(cv);
   renderErrors();
@@ -301,7 +302,20 @@ $('#btn-pdf').addEventListener('click', () => {
   const previousTitle = document.title;
   document.title = `CV-${slugify(cv.personal.fullName) || 'curriculum'}`;
   window.addEventListener('afterprint', () => (document.title = previousTitle), { once: true });
+  // Render inmediato: el programado con requestAnimationFrame podría no haber corrido aún.
+  cancelAnimationFrame(frame);
+  renderCV(cv, preview);
   window.print();
+}
+
+$('#btn-pdf').addEventListener('click', printCV);
+
+// Ctrl+P (Cmd+P en Mac) pasa por la misma validación que el botón en vez de imprimir directamente.
+document.addEventListener('keydown', (event) => {
+  if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'p') {
+    event.preventDefault();
+    printCV();
+  }
 });
 
 /* ---------- Barra superior ---------- */
