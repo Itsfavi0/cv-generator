@@ -16,7 +16,7 @@
 - [x] Verificación a 375 px y en la vista de impresión
 - [x] `docs/screenshot.png`
 - [x] README final
-- [ ] Extras (ver `CLAUDE.md`)
+- [x] Extras (ver `CLAUDE.md`)
 
 ## Bitácora
 
@@ -29,12 +29,14 @@
 - 2026-10-15 — Verificado a 375 px (sin scroll horizontal) y la impresión con Chrome headless (CDP `Page.printToPDF`): las 3 plantillas salen en 1 página A4 con colores. Corregido: con `aspect-ratio` en un contenedor flex la hoja no crecía y el texto se salía en móvil; ahora un pseudo-elemento fija el alto mínimo. La barra superior deja de ser sticky en móvil.
 - 2026-10-15 — `docs/screenshot.png` (1440×900, modo claro, CV de ejemplo con la plantilla Moderna) generada con Chrome headless vía CDP, porque el pane integrado no siempre pinta cuando la ventana está en segundo plano.
 - 2026-10-15 — README final: frase de valor, captura, funcionalidades, stack, uso, tests, estructura, decisiones técnicas e ideas futuras. Decisiones de la noche anotadas en PROGRESS.md.
+- 2026-10-15 — Extras: `Ctrl+P` con validación (y render inmediato antes de imprimir), plantilla Ejecutiva y botón "Deshacer" en el toast al eliminar una entrada. Verificados en el navegador y con impresión headless (4 plantillas, 1 página cada una). Consola sin errores.
 
 ## Decisiones
 
 - JavaScript puro en vez de React: el objetivo es dominar el DOM y el estado sin abstracciones.
 - PDF con impresión nativa en vez de jsPDF: el texto queda real y legible para ATS, y no suma dependencias.
 - Todas las plantillas comparten el HTML y se diferencian solo por CSS.
+- Extras: `Ctrl+P`/`Cmd+P` se intercepta y pasa por la misma validación que el botón; imprimir desde el menú del navegador no se puede bloquear, pero sí imprime la vista previa. "Deshacer" restaura la entrada en su posición original durante 6 s, salvo que entretanto se haya cargado otro CV o la sección esté llena.
 - `npm test` usa el glob `"tests/**/*.test.js"`: en Node 24, `node --test tests/` falla porque ya no acepta un directorio.
 - Los errores de validación solo se muestran en campos tocados (o todos al pulsar "Descargar PDF"), como ya hacía `app.js`.
 - Alto mínimo A4 con un pseudo-elemento `::before` (`padding-top` proporcional) en vez de `aspect-ratio`: en un contenedor flex, Chrome fijaba el alto y el contenido se salía de la hoja en móvil. El requisito "aspect-ratio como alto mínimo" se cumple con otra técnica.

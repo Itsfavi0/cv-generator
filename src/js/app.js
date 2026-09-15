@@ -46,12 +46,19 @@ function setPath(obj, path, value) {
 }
 
 let toastTimer;
-function toast(message, type = 'info') {
-  toastEl.textContent = message;
+/** Muestra un aviso. Con `action` ({ label, onClick }) añade un botón y dura más para dar tiempo a pulsarlo. */
+function toast(message, type = 'info', action = null) {
+  const hide = () => toastEl.classList.remove('is-visible');
+  const onClick = () => {
+    hide();
+    action.onClick();
+  };
+  const button = action && el('button', { type: 'button', class: 'toast__action', onClick }, action.label);
+  toastEl.replaceChildren(el('span', {}, message), button);
   toastEl.dataset.type = type;
   toastEl.classList.add('is-visible');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toastEl.classList.remove('is-visible'), 3200);
+  toastTimer = setTimeout(hide, action ? 6000 : 3200);
 }
 
 /* ---------- Render ---------- */
@@ -228,13 +235,13 @@ form.addEventListener('click', (event) => {
     const action = actionButton.dataset.action;
 
     if (action === 'remove') {
-      cv[listName] = cv[listName].filter((item) => item.id !== id);
-    } else {
-      moveItem(cv[listName], id, action === 'up' ? -1 : 1);
+      removeEntry(listName, id);
+      return;
     }
+    moveItem(cv[listName], id, action === 'up' ? -1 : 1);
     renderEntries(listName);
     update();
-    if (action !== 'remove') $(`.entry[data-id="${id}"] [data-action="${action}"]`, form)?.focus();
+    $(`.entry[data-id="${id}"] [data-action="${action}"]`, form)?.focus();
     return;
   }
 
@@ -246,6 +253,29 @@ form.addEventListener('click', (event) => {
     $('#skill-input').focus();
   }
 });
+
+function removeEntry(listName, id) {
+  const owner = cv;
+  const index = owner[listName].findIndex((item) => item.id === id);
+  if (index < 0) return;
+  const [removed] = owner[listName].splice(index, 1);
+  renderEntries(listName);
+  update();
+  // La entrada eliminada ya no existe: el foco pasa al botón "Añadir" de su sección.
+  $(`[data-add="${listName}"]`, form).focus();
+
+  toast(`${LIST_LABELS[listName]} eliminada`, 'info', {
+    label: 'Deshacer',
+    onClick() {
+      // Si entretanto se cargó otro CV (ejemplo, importar, reiniciar), no hay nada que restaurar.
+      if (cv !== owner || cv[listName].length >= LIMITS.entries) return;
+      cv[listName].splice(Math.min(index, cv[listName].length), 0, removed);
+      renderEntries(listName);
+      update();
+      $(`.entry[data-id="${removed.id}"] input`, form)?.focus();
+    },
+  });
+}
 
 /* ---------- Habilidades ---------- */
 

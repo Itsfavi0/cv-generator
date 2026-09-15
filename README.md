@@ -1,17 +1,17 @@
 # Generador de CV
 
-**Escribe tu currículum una vez, míralo en vivo con tres diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
+**Escribe tu currículum una vez, míralo en vivo con cuatro diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
 
 ![Editor a la izquierda y vista previa del CV de ejemplo con la plantilla Moderna a la derecha](docs/screenshot.png)
 
 ## Funcionalidades
 
 - **Vista previa en vivo**: cada tecla actualiza el CV al instante.
-- **3 plantillas**: Clásica (serif, centrada), Moderna (barra lateral de color) y Minimalista (versalitas y mucho aire), con **color de acento** a elección.
+- **4 plantillas**: Clásica (serif, centrada), Moderna (barra lateral de color), Minimalista (versalitas y mucho aire) y Ejecutiva (encabezado oscuro, dos columnas), con **color de acento** a elección.
 - **Puntaje de calidad (0–100)** con consejos concretos para mejorarlo (se muestran los 3 primeros pendientes): resumen de 150–600 caracteres, logros cuantificados, al menos 5 habilidades, etc.
 - **Validación amable**: los errores aparecen al salir del campo, no mientras escribes. Nombre y email obligatorios; teléfono, web y fechas se comprueban.
-- **Exportar a PDF** con la impresión nativa del navegador, en A4 y sin márgenes. El texto se puede seleccionar y copiar.
-- **Experiencia y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar. Las líneas que empiezan con `-` se convierten en viñetas.
+- **Exportar a PDF** con la impresión nativa del navegador, en A4 y sin márgenes. El texto se puede seleccionar y copiar. `Ctrl+P` también pasa por la validación antes de imprimir.
+- **Experiencia y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. Las líneas que empiezan con `-` se convierten en viñetas.
 - **Habilidades como etiquetas**: Enter para añadir, varias a la vez separadas por comas y sin duplicados.
 - **Guardado automático** en `localStorage`. **Importa y exporta** tus datos en JSON.
 - **Modo claro y oscuro** (sigue al sistema o se elige con ◐) y diseño **responsivo** hasta 375 px.
@@ -48,7 +48,7 @@ Abre <http://localhost:5173>. Pulsa **Cargar ejemplo** para ver un CV completo, 
 npm test
 ```
 
-Hay 35 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador; ver [`PROGRESS.md`](PROGRESS.md).
+Hay 36 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador; ver [`PROGRESS.md`](PROGRESS.md).
 
 ## Estructura
 
