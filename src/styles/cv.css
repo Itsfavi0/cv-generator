@@ -452,7 +452,8 @@
     font-size: 20pt;
   }
 
-  .cv--modern {
+  .cv--modern,
+  .cv--executive {
     padding: 0;
   }
 
