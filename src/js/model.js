@@ -4,6 +4,7 @@ export const TEMPLATES = [
   { id: 'classic', label: 'Clásica' },
   { id: 'modern', label: 'Moderna' },
   { id: 'minimal', label: 'Minimalista' },
+  { id: 'executive', label: 'Ejecutiva' },
 ];
 
 export const DEFAULT_ACCENT = '#2563eb';

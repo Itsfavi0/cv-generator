@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   DEFAULT_ACCENT,
+  TEMPLATES,
   addSkill,
   createEmptyCV,
   createExperience,
@@ -54,6 +55,13 @@ test('normalizeCV recorta textos largos y limita listas', () => {
   assert.equal(cv.summary.length, 2000);
   assert.equal(cv.experience.length, 20);
   assert.equal(cv.skills.length, 30);
+});
+
+test('normalizeCV acepta todas las plantillas de TEMPLATES', () => {
+  for (const { id } of TEMPLATES) {
+    assert.equal(normalizeCV({ template: id }).template, id);
+  }
+  assert.ok(TEMPLATES.some((t) => t.id === 'executive'));
 });
 
 test('normalizeCV conserva un CV válido (ida y vuelta por JSON)', () => {

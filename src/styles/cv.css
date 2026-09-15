@@ -350,6 +350,91 @@
   font-weight: 700;
 }
 
+/* ---------- Ejecutiva: encabezado oscuro y dos columnas (habilidades a la derecha) ---------- */
+
+.cv--executive {
+  padding: 0;
+}
+
+.cv--executive .cv__header {
+  padding: 14mm 16mm 11mm;
+  background: #1d2330;
+  color: #fff;
+  border-bottom: 3pt solid var(--cv-accent);
+}
+
+.cv--executive .cv__name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 25pt;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Sobre fondo oscuro el acento se aclara para que el título se lea con cualquier color. */
+.cv--executive .cv__title {
+  color: color-mix(in srgb, var(--cv-accent) 45%, #fff);
+  letter-spacing: 0.03em;
+}
+
+.cv--executive .cv__contact {
+  color: #c9ced8;
+}
+
+.cv--executive .cv__body {
+  flex-direction: row;
+  gap: 9mm;
+  margin-top: 0;
+  padding: 10mm 16mm 12mm;
+}
+
+.cv--executive .cv__main {
+  flex: 1;
+}
+
+.cv--executive .cv__aside {
+  flex: 0 0 50mm;
+  padding-left: 7mm;
+  border-left: 1px solid var(--cv-line);
+}
+
+.cv--executive .cv__section-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11pt;
+  letter-spacing: 0.06em;
+  color: #1d2330;
+}
+
+.cv--executive .cv__section-title::after {
+  content: '';
+  display: block;
+  width: 22pt;
+  height: 2pt;
+  margin-top: 3pt;
+  background: var(--cv-accent);
+}
+
+.cv--executive .cv__aside .cv__skills {
+  flex-direction: column;
+  gap: 3pt;
+}
+
+.cv--executive .cv__aside .cv__skills li {
+  padding: 0 0 0 9pt;
+  border: 0;
+  position: relative;
+  font-size: 9.5pt;
+}
+
+.cv--executive .cv__aside .cv__skills li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 4pt;
+  height: 4pt;
+  background: var(--cv-accent);
+}
+
 /* ---------- Hoja estrecha (móvil): menos margen y la barra lateral pasa abajo ---------- */
 
 @container (max-width: 560px) {
@@ -394,6 +479,32 @@
   }
 
   .cv--modern .cv__aside .cv__skills {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3pt 12pt;
+  }
+
+  .cv--executive .cv__header {
+    padding: 22px 20px 16px;
+  }
+
+  .cv--executive .cv__name {
+    font-size: 20pt;
+  }
+
+  .cv--executive .cv__body {
+    flex-direction: column;
+    padding: 18px 20px;
+  }
+
+  .cv--executive .cv__aside {
+    flex: none;
+    padding: 12px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--cv-line);
+  }
+
+  .cv--executive .cv__aside .cv__skills {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 3pt 12pt;
