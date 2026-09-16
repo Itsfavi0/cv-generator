@@ -47,11 +47,11 @@ Lo escribió la sesión coordinadora antes de pausar. Ningún archivo se ha ejec
 
 ## Definición de terminado
 
-- [ ] `npm test` en verde, con tests de `format`, `validation`, `score`, `model` y `storage`.
-- [ ] Verificado en el navegador integrado (con `npm start`): escribir y ver la vista previa, que aparezcan los errores al salir de un campo, las 3 plantillas, el color de acento, cargar el ejemplo, importar y exportar JSON, reiniciar, el modo oscuro, la vista de impresión y el ancho de 375 px. **Sin errores en la consola.**
-- [ ] `docs/screenshot.png` (con el CV de ejemplo y la plantilla Moderna).
-- [ ] README final según `../CLAUDE.md`, `.gitignore` y `LICENSE` (MIT, Favio Brañez, 2026).
-- [ ] Commits pequeños por cada paso.
+- [x] `npm test` en verde, con tests de `format`, `validation`, `score`, `model` y `storage`.
+- [x] Verificado en el navegador integrado (con `npm start`): escribir y ver la vista previa, que aparezcan los errores al salir de un campo, las 3 plantillas, el color de acento, cargar el ejemplo, importar y exportar JSON, reiniciar, el modo oscuro, la vista de impresión y el ancho de 375 px. **Sin errores en la consola.**
+- [x] `docs/screenshot.png` (con el CV de ejemplo y la plantilla Moderna).
+- [x] README final según `../CLAUDE.md`, `.gitignore` y `LICENSE` (MIT, Favio Brañez, 2026).
+- [x] Commits pequeños por cada paso.
 
 ## Extras (solo si sobra tiempo, en este orden)
 

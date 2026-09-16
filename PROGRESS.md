@@ -2,7 +2,7 @@
 
 > Fuente de verdad del avance. Marca `[x]` al terminar cada tarea, haz commit y añade una línea a la bitácora.
 
-**Estado:** 🚧 Base de código escrita, sin probar · **Última actualización:** 2026-10-15
+**Estado:** ✅ Terminado, incluidos los 3 extras (falta tu revisión) · **Última actualización:** 2026-10-15
 
 ## Tareas
 
@@ -30,6 +30,7 @@
 - 2026-10-15 — `docs/screenshot.png` (1440×900, modo claro, CV de ejemplo con la plantilla Moderna) generada con Chrome headless vía CDP, porque el pane integrado no siempre pinta cuando la ventana está en segundo plano.
 - 2026-10-15 — README final: frase de valor, captura, funcionalidades, stack, uso, tests, estructura, decisiones técnicas e ideas futuras. Decisiones de la noche anotadas en PROGRESS.md.
 - 2026-10-15 — Extras: `Ctrl+P` con validación (y render inmediato antes de imprimir), plantilla Ejecutiva y botón "Deshacer" en el toast al eliminar una entrada. Verificados en el navegador y con impresión headless (4 plantillas, 1 página cada una). Consola sin errores.
+- 2026-10-15 — Corregido el padding de la Ejecutiva en hojas estrechas. Definición de terminado completa y resumen final escrito.
 
 ## Decisiones
 
@@ -53,4 +54,29 @@ _(ninguno)_
 
 ## Resumen final para Favio
 
-_(Se completa al terminar.)_
+**Cómo ejecutarlo**
+
+```bash
+cd portafolio/cv-generator
+npm start   # http://localhost:5173 (no hay que instalar nada)
+npm test    # 36 tests con node:test
+```
+
+**Qué probar primero (5 minutos)**
+
+1. Pulsa **Cargar ejemplo**: el puntaje debe marcar 100 y la vista previa mostrar a Valeria con la plantilla Moderna.
+2. Cambia entre las **4 plantillas** (Clásica, Moderna, Minimalista, Ejecutiva) y el **color**.
+3. Pulsa **Descargar PDF** → "Guardar como PDF". Abre el PDF y comprueba que el texto se puede seleccionar (eso es lo que leen los ATS). En el diálogo, deja *Márgenes: ninguno* y activa *Gráficos de fondo* si tu navegador no lo hace solo.
+4. Borra el email, sal del campo con Tab y pulsa `Ctrl+P`: debe salir el error y no imprimir.
+5. Elimina una experiencia y pulsa **Deshacer** en el aviso.
+6. Pulsa ◐ para el modo oscuro, y abre las DevTools en modo móvil (375 px).
+
+**Qué cambié del código existente** (detalle en la bitácora): el script `npm test` (no funcionaba en Node 24), el borde rojo de los errores (no se veía), la hoja A4 que no crecía en móvil, "Importar JSON" ahora es un botón accesible con teclado, límite de 20 entradas también en la UI, render inmediato antes de imprimir y la regex de tildes de `slugify` escrita de forma legible. El resto de la lógica estaba bien y se mantuvo.
+
+**Qué quedó pendiente o sin verificar**
+
+- Solo se probó en Chromium (navegador integrado y Chrome headless). Falta un vistazo en Firefox y Safari; `color-mix()` y las *container queries* necesitan versiones de 2023 o posteriores.
+- El diálogo real de "Guardar como PDF" no se puede automatizar: se comprobó con `Page.printToPDF` de Chrome (1 página A4 por plantilla, con colores). Conviene que lo pruebes tú una vez.
+- En la plantilla Moderna, si el CV ocupa 2 páginas, la barra lateral de color solo cubre la primera. Con un CV normal de 1 página no se nota.
+- No hay tests automáticos de la interfaz (`app.js`, `render.js`); la UI se verificó a mano. Playwright quedó en "Ideas futuras" del README.
+- Nada de push: los 17 commits están solo en local, en la rama `main`.
