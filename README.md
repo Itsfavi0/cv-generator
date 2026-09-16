@@ -42,13 +42,21 @@ Abre <http://localhost:5173>. Pulsa **Cargar ejemplo** para ver un CV completo, 
 
 > Los módulos ES no funcionan abriendo `index.html` con doble clic (`file://`); por eso se incluye un servidor estático mínimo. También sirve cualquier otro, como la extensión Live Server.
 
+## Despliegue
+
+Es un sitio 100 % estático y todas las rutas son relativas, así que funciona en cualquier hosting de archivos y también dentro de una subcarpeta. Solo hacen falta `index.html` y `src/`; `tests/`, `scripts/` y `package.json` son para desarrollo.
+
+**GitHub Pages:** sube el repositorio y, en *Settings → Pages*, elige *Deploy from a branch*, rama `main` y carpeta `/ (root)`. Quedará en `https://<usuario>.github.io/<repo>/`.
+
+También funciona en Netlify, Vercel o Cloudflare Pages sin comando de build (directorio de publicación: la raíz).
+
 ## Tests
 
 ```bash
 npm test
 ```
 
-Hay 36 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador; ver [`PROGRESS.md`](PROGRESS.md).
+Hay 36 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador (Chrome), incluidos el ancho de 375 px y la impresión de las 4 plantillas en A4.
 
 ## Estructura
 
@@ -92,7 +100,6 @@ cv-generator/
 - Elegir la tipografía de cada plantilla.
 - Reordenar las entradas arrastrándolas, además de con los botones ↑ ↓.
 - Tests de interfaz con Playwright.
-- Publicarlo en GitHub Pages: es estático, así que no necesita cambios.
 
 ## Licencia
 
