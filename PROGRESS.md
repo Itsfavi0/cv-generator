@@ -79,4 +79,4 @@ npm test    # 36 tests con node:test
 - El diálogo real de "Guardar como PDF" no se puede automatizar: se comprobó con `Page.printToPDF` de Chrome (1 página A4 por plantilla, con colores). Conviene que lo pruebes tú una vez.
 - En la plantilla Moderna, si el CV ocupa 2 páginas, la barra lateral de color solo cubre la primera. Con un CV normal de 1 página no se nota.
 - No hay tests automáticos de la interfaz (`app.js`, `render.js`); la UI se verificó a mano. Playwright quedó en "Ideas futuras" del README.
-- Nada de push: los 17 commits están solo en local, en la rama `main`.
+- Nada de push: todos los commits están solo en local, en la rama `main`.
