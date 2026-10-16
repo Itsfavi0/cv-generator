@@ -26,4 +26,4 @@ Primera versión pública.
 - Los enlaces solo aceptan `http` y `https`.
 - Los datos importados se sanean y se limitan en tamaño antes de usarse.
 
-[1.0.0]: https://github.com/USUARIO/cv-generator/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Itsfavi0/cv-generator/releases/tag/v1.0.0

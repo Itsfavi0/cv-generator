@@ -2,6 +2,8 @@
 
 **Escribe tu currículum una vez, míralo en vivo con cuatro diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
 
+**🔗 [Ver demo en vivo](https://cv-generator-beryl-two.vercel.app/)** · [Notas de la versión 1.0.0](https://github.com/Itsfavi0/cv-generator/releases/tag/v1.0.0)
+
 ![Editor a la izquierda y vista previa del CV de ejemplo con la plantilla Moderna a la derecha](docs/screenshot.png)
 
 ## Funcionalidades
@@ -33,7 +35,7 @@
 Requisitos: Node.js 20 o superior. No hay que instalar paquetes.
 
 ```bash
-git clone <url-del-repo> cv-generator
+git clone https://github.com/Itsfavi0/cv-generator.git
 cd cv-generator
 npm start
 ```
@@ -46,9 +48,9 @@ Abre <http://localhost:5173>. Pulsa **Cargar ejemplo** para ver un CV completo, 
 
 Es un sitio 100 % estático y todas las rutas son relativas, así que funciona en cualquier hosting de archivos y también dentro de una subcarpeta. Solo hacen falta `index.html` y `src/`; `tests/`, `scripts/` y `package.json` son para desarrollo.
 
-**GitHub Pages:** sube el repositorio y, en *Settings → Pages*, elige *Deploy from a branch*, rama `main` y carpeta `/ (root)`. Quedará en `https://<usuario>.github.io/<repo>/`.
+La demo está publicada en **[Vercel](https://cv-generator-beryl-two.vercel.app/)**. No necesita comando de build: el directorio de salida es la raíz del repositorio.
 
-También funciona en Netlify, Vercel o Cloudflare Pages sin comando de build (directorio de publicación: la raíz).
+También funciona sin cambios en GitHub Pages (*Settings → Pages → Deploy from a branch*, rama `main`, carpeta `/ (root)`), Netlify o Cloudflare Pages.
 
 ## Tests
 
