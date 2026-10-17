@@ -8,7 +8,7 @@
 
 **Escribe tu currículum una vez, míralo en vivo con cuatro diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
 
-**🔗 [Ver demo en vivo](https://cv-generator-beryl-two.vercel.app/)** · [Notas de la versión 1.0.0](https://github.com/Itsfavi0/cv-generator/releases/tag/v1.0.0)
+**🔗 [Ver demo en vivo](https://cv-generator-beryl-two.vercel.app/)** · [Notas de la versión 1.1.0](CHANGELOG.md)
 
 ![Editor a la izquierda y vista previa del CV de ejemplo con la plantilla Moderna a la derecha](docs/screenshot.png)
 

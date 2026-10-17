@@ -3,7 +3,9 @@
 Todos los cambios relevantes de este proyecto se documentan aquí.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 
-## [Sin publicar]
+## [1.1.0] - 2026-10-16
+
+El generador pasa a llamarse **Perfila** y suma las secciones y avisos que pide un proceso de selección real.
 
 ### Añadido
 
@@ -58,5 +60,5 @@ Primera versión pública.
 - Los enlaces solo aceptan `http` y `https`.
 - Los datos importados se sanean y se limitan en tamaño antes de usarse.
 
-[Sin publicar]: https://github.com/Itsfavi0/cv-generator/compare/v1.0.0...HEAD
+[1.1.0]: https://github.com/Itsfavi0/cv-generator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Itsfavi0/cv-generator/releases/tag/v1.0.0
