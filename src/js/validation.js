@@ -20,6 +20,14 @@ export function isValidUrl(value) {
   return new URL(href).hostname.includes('.');
 }
 
+/** Un perfil de LinkedIn: linkedin.com (o un subdominio como pe.linkedin.com) con una ruta. */
+export function isValidLinkedIn(value) {
+  if (!isValidUrl(value)) return false;
+  const url = new URL(toHref(value));
+  const host = url.hostname.toLowerCase();
+  return (host === 'linkedin.com' || host.endsWith('.linkedin.com')) && url.pathname.length > 1;
+}
+
 const blank = (value) => !(value ?? '').trim();
 
 /**
@@ -42,6 +50,10 @@ export function validateCV(cv) {
 
   if (!blank(p.website) && !isValidUrl(p.website)) {
     errors['personal.website'] = 'Escribe una URL válida (ej. github.com/usuario).';
+  }
+
+  if (!blank(p.linkedin) && !isValidLinkedIn(p.linkedin)) {
+    errors['personal.linkedin'] = 'Escribe la URL de tu perfil (ej. linkedin.com/in/usuario).';
   }
 
   for (const item of cv.experience) {

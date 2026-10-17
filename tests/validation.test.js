@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createCertification, createEducation, createEmptyCV, createExperience, createLanguage } from '../src/js/model.js';
-import { isValidEmail, isValidPhone, isValidUrl, validateCV } from '../src/js/validation.js';
+import { isValidEmail, isValidLinkedIn, isValidPhone, isValidUrl, validateCV } from '../src/js/validation.js';
 
 function validCV() {
   const cv = createEmptyCV();
@@ -96,4 +96,21 @@ test('idioma: nombre y nivel obligatorios', () => {
   const lang = createLanguage();
   cv.languages.push(lang, createLanguage({ name: 'Inglés', level: 'b2' }));
   assert.deepEqual(Object.keys(validateCV(cv)).sort(), [`languages.${lang.id}.level`, `languages.${lang.id}.name`]);
+});
+
+test('isValidLinkedIn exige un perfil de linkedin.com', () => {
+  for (const ok of ['linkedin.com/in/ana', 'https://www.linkedin.com/in/ana-perez/', 'pe.linkedin.com/in/ana']) {
+    assert.equal(isValidLinkedIn(ok), true, ok);
+  }
+  for (const bad of ['linkedin.com', 'github.com/ana', 'notlinkedin.com/in/ana', 'javascript:alert(1)', 'ana']) {
+    assert.equal(isValidLinkedIn(bad), false, bad);
+  }
+});
+
+test('LinkedIn opcional, pero válido si se indica', () => {
+  const cv = validCV();
+  cv.personal.linkedin = 'github.com/ana';
+  assert.deepEqual(Object.keys(validateCV(cv)), ['personal.linkedin']);
+  cv.personal.linkedin = 'linkedin.com/in/ana';
+  assert.deepEqual(validateCV(cv), {});
 });

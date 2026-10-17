@@ -96,6 +96,7 @@ export function createEmptyCV() {
       phone: '',
       location: '',
       website: '',
+      linkedin: '',
     },
     summary: '',
     experience: [],
@@ -231,6 +232,7 @@ export function sampleCV() {
       phone: '+51 987 654 321',
       location: 'Lima, Perú',
       website: 'github.com/valeriaqr',
+      linkedin: 'linkedin.com/in/valeriaqr',
     },
     summary:
       'Desarrolladora frontend con 3 años de experiencia construyendo interfaces accesibles y rápidas con React. ' +

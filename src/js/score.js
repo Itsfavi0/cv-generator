@@ -22,8 +22,8 @@ const CRITERIA = [
   },
   {
     points: 5,
-    test: (cv) => filled(cv.personal.location) && filled(cv.personal.website),
-    tip: 'Agrega tu ciudad y un enlace a tu GitHub o portafolio.',
+    test: (cv) => filled(cv.personal.location) && (filled(cv.personal.linkedin) || filled(cv.personal.website)),
+    tip: 'Agrega tu ciudad y tu LinkedIn o un enlace a tu portafolio.',
   },
   {
     points: 15,

@@ -25,14 +25,20 @@ function bullets(text) {
   return items.length ? el('ul', { class: 'cv__bullets' }, items.map((item) => el('li', {}, item))) : null;
 }
 
+// Se muestra la URL sin protocolo ("linkedin.com/in/usuario"): es texto que un ATS lee y que
+// un reclutador puede escribir si imprime el CV; en el PDF además es un enlace.
+function link(url) {
+  const href = toHref(url);
+  return el('li', {}, href ? el('a', { href, target: '_blank', rel: 'noopener' }, displayUrl(url)) : url);
+}
+
 function contactList(personal) {
-  const href = toHref(personal.website);
   const items = [
     personal.email && el('li', {}, el('a', { href: `mailto:${personal.email.trim()}` }, personal.email.trim())),
     personal.phone && el('li', {}, personal.phone),
     personal.location && el('li', {}, personal.location),
-    personal.website &&
-      el('li', {}, href ? el('a', { href, target: '_blank', rel: 'noopener' }, displayUrl(personal.website)) : personal.website),
+    personal.linkedin.trim() && link(personal.linkedin),
+    personal.website.trim() && link(personal.website),
   ].filter(Boolean);
   return items.length ? el('ul', { class: 'cv__contact' }, items) : null;
 }
