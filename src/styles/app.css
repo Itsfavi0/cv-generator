@@ -584,6 +584,19 @@ input[type='color'] {
   padding: 16px;
 }
 
+.score-card__pages {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.score-card__pages.is-warning {
+  color: var(--warning);
+  font-weight: 600;
+}
+
 .score-card__head {
   display: flex;
   align-items: center;
@@ -818,6 +831,7 @@ input[type='color'] {
   .editor,
   .preview-toolbar,
   .score-card,
+  .cv-measure,
   .toast {
     display: none !important;
   }

@@ -64,6 +64,16 @@ export function parseBullets(text) {
     .filter(Boolean);
 }
 
+/**
+ * Páginas A4 que ocupa un contenido de `height` px en una hoja de `width` px de ancho.
+ * Se tolera 1 px de redondeo para que un CV que llena justo la hoja no cuente como 2.
+ */
+export function countPages(height, width) {
+  if (!(height > 0) || !(width > 0)) return 1;
+  const pageHeight = (width * 297) / 210;
+  return Math.max(1, Math.ceil((height - 1) / pageHeight));
+}
+
 /** Nombre de archivo seguro a partir del nombre de la persona. */
 export function slugify(text) {
   return (text ?? '')

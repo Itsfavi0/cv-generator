@@ -18,7 +18,7 @@ import { renderCV } from './render.js';
 import { BULLET_RULES, scoreCV, scoreLabel } from './score.js';
 import { clearCV, loadCV, saveCV } from './storage.js';
 import { debounce, el } from './utils/dom.js';
-import { parseBullets, slugify } from './utils/format.js';
+import { countPages, parseBullets, slugify } from './utils/format.js';
 import { validateCV } from './validation.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -83,6 +83,23 @@ function schedulePreview() {
   frame = requestAnimationFrame(() => renderCV(cv, preview));
 }
 
+// Norma habitual de RR. HH.: 1 página para perfiles junior y 2 como máximo.
+const MAX_PAGES = 2;
+
+const renderPageCount = debounce(() => {
+  const measure = $('#cv-measure');
+  renderCV(cv, measure);
+  const pages = countPages(measure.firstElementChild.offsetHeight, measure.offsetWidth);
+  const slot = $('#page-count');
+  slot.textContent =
+    pages > MAX_PAGES
+      ? `Tu CV ocupa unas ${pages} páginas A4. Lo recomendable es 1 (2 como máximo): recorta lo menos relevante para el puesto.`
+      : pages === 2
+        ? 'Ocupa 2 páginas A4, el máximo recomendable. Si tienes poca experiencia, intenta que quepa en 1.'
+        : 'Cabe en 1 página A4.';
+  slot.classList.toggle('is-warning', pages > MAX_PAGES);
+}, 300);
+
 const persist = debounce(() => {
   if (!saveCV(cv)) toast('No se pudo guardar en este navegador (almacenamiento bloqueado).', 'error');
 }, 400);
@@ -139,6 +156,7 @@ function update() {
   renderScore();
   $('#summary-count').textContent = cv.summary.trim().length;
   schedulePreview();
+  renderPageCount();
   persist();
 }
 

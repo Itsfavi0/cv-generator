@@ -1,6 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { displayUrl, formatMonth, formatRange, parseBullets, parseDescription, slugify, toHref } from '../src/js/utils/format.js';
+import {
+  countPages,
+  displayUrl,
+  formatMonth,
+  formatRange,
+  parseBullets,
+  parseDescription,
+  slugify,
+  toHref,
+} from '../src/js/utils/format.js';
 
 test('formatMonth convierte AAAA-MM a texto corto en español', () => {
   assert.equal(formatMonth('2024-03'), 'mar 2024');
@@ -56,4 +65,16 @@ test('slugify quita tildes y símbolos', () => {
   assert.equal(slugify('Favio Brañez Peña'), 'favio-branez-pena');
   assert.equal(slugify('  ¡Hola, Mundo!  '), 'hola-mundo');
   assert.equal(slugify(''), '');
+});
+
+test('countPages calcula páginas A4 según el ancho de la hoja', () => {
+  const width = 794; // 210 mm a 96 ppp
+  const page = (width * 297) / 210; // ≈ 1123 px
+  assert.equal(countPages(500, width), 1);
+  assert.equal(countPages(page, width), 1);
+  assert.equal(countPages(page + 1, width), 1);
+  assert.equal(countPages(page + 20, width), 2);
+  assert.equal(countPages(page * 2.5, width), 3);
+  assert.equal(countPages(0, width), 1);
+  assert.equal(countPages(NaN, 0), 1);
 });

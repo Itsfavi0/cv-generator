@@ -161,6 +161,7 @@
             </div>
           </div>
           <ul class="score-card__tips" id="score-tips"></ul>
+          <p class="score-card__pages" id="page-count" aria-live="polite"></p>
         </div>
 
         <div class="cv-page" id="cv-preview"></div>
@@ -168,6 +169,9 @@
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Copia invisible del CV a ancho A4 real para contar páginas, sin depender del ancho de la vista previa. -->
+    <div class="cv-page cv-measure" id="cv-measure" aria-hidden="true"></div>
 
     <template id="tpl-experience">
       <div class="entry">
