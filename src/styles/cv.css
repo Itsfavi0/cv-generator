@@ -189,6 +189,16 @@
   font-size: 9pt;
 }
 
+/* "Inglés: Intermedio alto (B2)", una línea por idioma. */
+.cv__languages {
+  display: flex;
+  flex-direction: column;
+  gap: 3pt;
+  padding: 0;
+  list-style: none;
+  font-size: 9.5pt;
+}
+
 /* ---------- Clásica: una columna, encabezado centrado y habilidades al final ---------- */
 
 .cv--classic .cv__header {
@@ -343,7 +353,15 @@
   font-size: 10pt;
 }
 
-.cv--minimal .cv__skills li + li::before {
+.cv--minimal .cv__languages {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0;
+  font-size: 10pt;
+}
+
+.cv--minimal .cv__skills li + li::before,
+.cv--minimal .cv__languages li + li::before {
   content: '·';
   margin: 0 7pt;
   color: var(--cv-accent);

@@ -1,10 +1,13 @@
 import {
+  LANGUAGE_LEVELS,
   LIMITS,
   TEMPLATES,
   addSkill,
+  createCertification,
   createEducation,
   createEmptyCV,
   createExperience,
+  createLanguage,
   moveItem,
   normalizeCV,
   sampleCV,
@@ -22,8 +25,14 @@ const form = $('#cv-form');
 const preview = $('#cv-preview');
 const toastEl = $('#toast');
 
-const FACTORIES = { experience: createExperience, education: createEducation };
-const LIST_LABELS = { experience: 'Experiencia', education: 'Educación' };
+// Secciones con varias entradas. Todas comparten el mismo mecanismo: <template id="tpl-{nombre}">,
+// contenedor [data-list] y botón [data-add]. `removed` va aparte por el género ("Idioma eliminado").
+const LISTS = {
+  experience: { create: createExperience, label: 'Experiencia', removed: 'Experiencia eliminada' },
+  education: { create: createEducation, label: 'Educación', removed: 'Educación eliminada' },
+  certifications: { create: createCertification, label: 'Certificación', removed: 'Certificación eliminada' },
+  languages: { create: createLanguage, label: 'Idioma', removed: 'Idioma eliminado' },
+};
 const THEME_KEY = 'cv-generator:theme';
 const MAX_IMPORT_BYTES = 1_000_000;
 
@@ -110,7 +119,7 @@ function update() {
 function buildEntry(listName, item, index, total) {
   const node = $(`#tpl-${listName}`).content.firstElementChild.cloneNode(true);
   node.dataset.id = item.id;
-  $('.entry__index', node).textContent = `${LIST_LABELS[listName]} ${index + 1}`;
+  $('.entry__index', node).textContent = `${LISTS[listName].label} ${index + 1}`;
   $('[data-action="up"]', node).disabled = index === 0;
   $('[data-action="down"]', node).disabled = index === total - 1;
 
@@ -123,7 +132,7 @@ function buildEntry(listName, item, index, total) {
     slot.dataset.errorFor = `${listName}.${item.id}.${slot.dataset.errorField}`;
   }
   const end = $('[data-field="end"]', node);
-  if (item.current) end.disabled = true;
+  if (end && item.current) end.disabled = true;
   return node;
 }
 
@@ -150,8 +159,7 @@ function fillForm() {
   for (const input of form.querySelectorAll('[name]')) {
     input.value = getPath(cv, input.name) ?? '';
   }
-  renderEntries('experience');
-  renderEntries('education');
+  for (const listName of Object.keys(LISTS)) renderEntries(listName);
   renderSkills();
   $('#select-template').value = cv.template;
   $('#input-accent').value = cv.accent;
@@ -220,11 +228,11 @@ form.addEventListener('click', (event) => {
       toast(`Máximo ${LIMITS.entries} entradas por sección.`, 'error');
       return;
     }
-    const item = FACTORIES[listName]();
+    const item = LISTS[listName].create();
     cv[listName].push(item);
     renderEntries(listName);
     update();
-    $(`.entry[data-id="${item.id}"] input`, form)?.focus();
+    $(`.entry[data-id="${item.id}"] input, .entry[data-id="${item.id}"] select`, form)?.focus();
     return;
   }
 
@@ -265,7 +273,7 @@ function removeEntry(listName, id) {
   // La entrada eliminada ya no existe: el foco pasa al botón "Añadir" de su sección.
   $(`[data-add="${listName}"]`, form).focus();
 
-  toast(`${LIST_LABELS[listName]} eliminada`, 'info', {
+  toast(LISTS[listName].removed, 'info', {
     label: 'Deshacer',
     onClick() {
       // Si entretanto se cargó otro CV (ejemplo, importar, reiniciar), no hay nada que restaurar.
@@ -273,7 +281,7 @@ function removeEntry(listName, id) {
       cv[listName].splice(Math.min(index, cv[listName].length), 0, removed);
       renderEntries(listName);
       update();
-      $(`.entry[data-id="${removed.id}"] input`, form)?.focus();
+      $(`.entry[data-id="${removed.id}"] input, .entry[data-id="${removed.id}"] select`, form)?.focus();
     },
   });
 }
@@ -302,6 +310,13 @@ $('#skill-input').addEventListener('keydown', (event) => {
 });
 $('#btn-add-skill').addEventListener('click', commitSkill);
 
+/* ---------- Idiomas ---------- */
+
+// Las opciones de nivel salen de model.js para que formulario y saneamiento usen la misma lista.
+$('#tpl-languages').content
+  .querySelector('[data-field="level"]')
+  .append(...LANGUAGE_LEVELS.map((level) => el('option', { value: level.id }, level.label)));
+
 /* ---------- Barra de vista previa ---------- */
 
 const templateSelect = $('#select-template');
@@ -325,7 +340,7 @@ function printCV() {
   const firstError = Object.keys(errors)[0];
   if (firstError) {
     toast('Revisa los campos marcados antes de exportar.', 'error');
-    $(`[data-error-for="${CSS.escape(firstError)}"]`)?.closest('.field')?.querySelector('input, textarea')?.focus();
+    $(`[data-error-for="${CSS.escape(firstError)}"]`)?.closest('.field')?.querySelector('input, textarea, select')?.focus();
     return;
   }
 

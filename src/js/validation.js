@@ -62,5 +62,19 @@ export function validateCV(cv) {
     }
   }
 
+  for (const item of cv.certifications) {
+    const key = `certifications.${item.id}`;
+    if (blank(item.name)) errors[`${key}.name`] = 'Indica el nombre de la certificación.';
+    if (!blank(item.url) && !isValidUrl(item.url)) {
+      errors[`${key}.url`] = 'Escribe una URL válida (ej. credly.com/badges/…).';
+    }
+  }
+
+  for (const item of cv.languages) {
+    const key = `languages.${item.id}`;
+    if (blank(item.name)) errors[`${key}.name`] = 'Indica el idioma.';
+    if (!item.level) errors[`${key}.level`] = 'Elige tu nivel.';
+  }
+
   return errors;
 }

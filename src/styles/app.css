@@ -221,6 +221,14 @@ abbr[title] {
   clear: both;
 }
 
+.card__optional {
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
 /* ---------- Campos ---------- */
 
 .grid-2 {
@@ -448,6 +456,7 @@ input[type='color'] {
 }
 
 .entry .field input:where(:not([type='checkbox'])),
+.entry .field select,
 .entry .field textarea {
   background: var(--surface);
 }

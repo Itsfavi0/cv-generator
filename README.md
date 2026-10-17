@@ -15,6 +15,7 @@
 - **Exportar a PDF** con la impresión nativa del navegador, en A4 y sin márgenes. El texto se puede seleccionar y copiar. `Ctrl+P` también pasa por la validación antes de imprimir.
 - **Experiencia y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. Las líneas que empiezan con `-` se convierten en viñetas.
 - **Habilidades como etiquetas**: Enter para añadir, varias a la vez separadas por comas y sin duplicados.
+- **Certificaciones e idiomas** como secciones opcionales: la certificación lleva entidad emisora, fecha y enlace a la credencial; el idioma se elige de una lista cerrada de niveles con su equivalente MCER ("Intermedio alto (B2)"). Si están vacías no aparecen en el CV ni restan puntaje.
 - **Guardado automático** en `localStorage`. **Importa y exporta** tus datos en JSON.
 - **Modo claro y oscuro** (sigue al sistema o se elige con ◐) y diseño **responsivo** hasta 375 px.
 - Accesible con teclado: foco visible, `aria-invalid` en los errores y se respeta `prefers-reduced-motion`.
@@ -58,7 +59,7 @@ También funciona sin cambios en GitHub Pages (*Settings → Pages → Deploy fr
 npm test
 ```
 
-Hay 36 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador (Chrome), incluidos el ancho de 375 px y la impresión de las 4 plantillas en A4.
+Hay 42 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador (Chrome y Safari de iPhone), incluidos el ancho de 375 px y la impresión de las 4 plantillas en A4.
 
 ## Estructura
 
@@ -93,12 +94,13 @@ cv-generator/
 - **Render agrupado con `requestAnimationFrame` y guardado con `debounce`.** Escribir rápido no re-renderiza ni guarda en cada tecla.
 - **Alto mínimo A4 con un pseudo-elemento.** Con `aspect-ratio` sobre el contenedor flex, Chrome dejaba la hoja con alto fijo y en móvil el texto se salía. Un `::before` invisible con `padding-top: calc(100% * 297 / 210)` fija el mínimo y la hoja crece si el CV es largo.
 - **Las plantillas se adaptan al ancho de la hoja, no al de la ventana** (`container-type: inline-size`). En móvil, la barra lateral de la Moderna pasa debajo; al imprimir siempre se ve el diseño A4 completo.
+- **Idiomas en una sola línea de texto.** "Inglés: Intermedio alto (B2)" se escribe como un único texto sin mezclar negrita y normal: al extraer el texto del PDF, los estilos distintos se separaban y el nivel quedaba lejos del idioma. El nivel incluye el código MCER para que coincida tanto con "Intermedio" como con "B2" en un filtro.
 - **Límites razonables** (120 caracteres por campo corto, 2000 en descripciones, 20 entradas por sección, 30 habilidades, JSON de 1 MB como máximo) para que un archivo importado no bloquee la página.
 
 ## Ideas futuras
 
 - Botón "Ver vista previa" fijo en móvil, porque ahora la hoja queda debajo de todo el formulario.
-- Más secciones opcionales: proyectos, idiomas y certificaciones.
+- Más secciones opcionales: proyectos.
 - Elegir la tipografía de cada plantilla.
 - Reordenar las entradas arrastrándolas, además de con los botones ↑ ↓.
 - Tests de interfaz con Playwright.

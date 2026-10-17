@@ -9,6 +9,18 @@ export const TEMPLATES = [
 
 export const DEFAULT_ACCENT = '#2563eb';
 
+// Lista cerrada de niveles: el texto incluye el nivel MCER entre paréntesis para que
+// lo entienda tanto un reclutador como un ATS que filtre por "B2" o por "Intermedio".
+export const LANGUAGE_LEVELS = [
+  { id: 'native', label: 'Nativo' },
+  { id: 'c2', label: 'Bilingüe (C2)' },
+  { id: 'c1', label: 'Avanzado (C1)' },
+  { id: 'b2', label: 'Intermedio alto (B2)' },
+  { id: 'b1', label: 'Intermedio (B1)' },
+  { id: 'a2', label: 'Básico (A2)' },
+  { id: 'a1', label: 'Principiante (A1)' },
+];
+
 export const LIMITS = {
   short: 120,
   long: 2000,
@@ -45,6 +57,26 @@ export function createEducation(data = {}) {
   };
 }
 
+export function createCertification(data = {}) {
+  return {
+    id: uid(),
+    name: '',
+    issuer: '',
+    date: '',
+    url: '',
+    ...data,
+  };
+}
+
+export function createLanguage(data = {}) {
+  return {
+    id: uid(),
+    name: '',
+    level: '',
+    ...data,
+  };
+}
+
 export function createEmptyCV() {
   return {
     template: 'classic',
@@ -60,6 +92,8 @@ export function createEmptyCV() {
     summary: '',
     experience: [],
     education: [],
+    certifications: [],
+    languages: [],
     skills: [],
   };
 }
@@ -110,6 +144,26 @@ export function normalizeCV(raw) {
       }),
     );
 
+  base.certifications = list(raw.certifications)
+    .filter((item) => item && typeof item === 'object')
+    .map((item) =>
+      createCertification({
+        name: str(item.name),
+        issuer: str(item.issuer),
+        date: month(item.date),
+        url: str(item.url),
+      }),
+    );
+
+  base.languages = list(raw.languages)
+    .filter((item) => item && typeof item === 'object')
+    .map((item) =>
+      createLanguage({
+        name: str(item.name),
+        level: LANGUAGE_LEVELS.some((l) => l.id === item.level) ? item.level : '',
+      }),
+    );
+
   const seen = new Set();
   base.skills = (Array.isArray(raw.skills) ? raw.skills : [])
     .filter((skill) => typeof skill === 'string')
@@ -132,6 +186,11 @@ export function addSkill(cv, skill) {
   if (cv.skills.some((s) => s.toLowerCase() === value.toLowerCase())) return false;
   cv.skills.push(value);
   return true;
+}
+
+/** Texto visible de un nivel de idioma ("b2" -> "Intermedio alto (B2)"). */
+export function languageLevelLabel(id) {
+  return LANGUAGE_LEVELS.find((level) => level.id === id)?.label ?? '';
 }
 
 /** Mueve un elemento de una lista hacia arriba (-1) o abajo (+1). */
@@ -188,6 +247,14 @@ export function sampleCV() {
         start: '2017-03',
         end: '2022-12',
       },
+    ],
+    certifications: [
+      { name: 'AWS Certified Cloud Practitioner', issuer: 'Amazon Web Services', date: '2024-05' },
+      { name: 'Scrum Foundation Professional Certificate', issuer: 'CertiProf', date: '2023-08' },
+    ],
+    languages: [
+      { name: 'Español', level: 'native' },
+      { name: 'Inglés', level: 'b2' },
     ],
     skills: ['JavaScript', 'React', 'HTML', 'CSS', 'Git', 'SQL', 'Python', 'Accesibilidad web'],
   });

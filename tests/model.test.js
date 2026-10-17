@@ -2,10 +2,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   DEFAULT_ACCENT,
+  LANGUAGE_LEVELS,
   TEMPLATES,
   addSkill,
   createEmptyCV,
   createExperience,
+  languageLevelLabel,
   moveItem,
   normalizeCV,
   sampleCV,
@@ -67,12 +69,57 @@ test('normalizeCV acepta todas las plantillas de TEMPLATES', () => {
 test('normalizeCV conserva un CV válido (ida y vuelta por JSON)', () => {
   const original = sampleCV();
   const restored = normalizeCV(JSON.parse(JSON.stringify(original)));
+  const strip = (items) => items.map(({ id, ...rest }) => rest);
   const withoutIds = (cv) => ({
     ...cv,
-    experience: cv.experience.map(({ id, ...rest }) => rest),
-    education: cv.education.map(({ id, ...rest }) => rest),
+    experience: strip(cv.experience),
+    education: strip(cv.education),
+    certifications: strip(cv.certifications),
+    languages: strip(cv.languages),
   });
   assert.deepEqual(withoutIds(restored), withoutIds(original));
+});
+
+test('normalizeCV acepta un CV de la v1.0.0, sin certificaciones ni idiomas', () => {
+  const cv = normalizeCV({ personal: { fullName: 'Ana' }, skills: ['JS'] });
+  assert.deepEqual(cv.certifications, []);
+  assert.deepEqual(cv.languages, []);
+  assert.equal(cv.personal.fullName, 'Ana');
+});
+
+test('normalizeCV sanea certificaciones e idiomas', () => {
+  const cv = normalizeCV({
+    certifications: [null, { name: 'AWS', issuer: 5, date: '2024-13-01', url: 'credly.com/x', admin: true }],
+    languages: ['Inglés', { name: 'Inglés', level: 'experto' }, { name: 'Francés', level: 'b1' }],
+  });
+  assert.equal(cv.certifications.length, 1);
+  assert.equal(cv.certifications[0].name, 'AWS');
+  assert.equal(cv.certifications[0].issuer, '');
+  assert.equal(cv.certifications[0].date, '');
+  assert.equal(cv.certifications[0].url, 'credly.com/x');
+  assert.equal('admin' in cv.certifications[0], false);
+  assert.ok(cv.certifications[0].id);
+  assert.deepEqual(
+    cv.languages.map(({ name, level }) => [name, level]),
+    [
+      ['Inglés', ''],
+      ['Francés', 'b1'],
+    ],
+  );
+});
+
+test('normalizeCV limita certificaciones e idiomas a 20', () => {
+  const many = Array.from({ length: 50 }, () => ({ name: 'x', level: 'a1' }));
+  const cv = normalizeCV({ certifications: many, languages: many });
+  assert.equal(cv.certifications.length, 20);
+  assert.equal(cv.languages.length, 20);
+});
+
+test('languageLevelLabel incluye el nivel MCER y tolera ids desconocidos', () => {
+  assert.equal(languageLevelLabel('b2'), 'Intermedio alto (B2)');
+  assert.equal(languageLevelLabel('native'), 'Nativo');
+  assert.equal(languageLevelLabel('zz'), '');
+  assert.equal(new Set(LANGUAGE_LEVELS.map((l) => l.id)).size, LANGUAGE_LEVELS.length);
 });
 
 test('addSkill evita vacíos y duplicados sin distinguir mayúsculas', () => {

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createEducation, createEmptyCV, createExperience } from '../src/js/model.js';
+import { createCertification, createEducation, createEmptyCV, createExperience, createLanguage } from '../src/js/model.js';
 import { isValidEmail, isValidPhone, isValidUrl, validateCV } from '../src/js/validation.js';
 
 function validCV() {
@@ -81,4 +81,19 @@ test('educación: título e institución obligatorios y fechas coherentes', () =
     `education.${study.id}.end`,
     `education.${study.id}.institution`,
   ]);
+});
+
+test('certificación: nombre obligatorio y enlace válido si se indica', () => {
+  const cv = validCV();
+  const cert = createCertification({ url: 'javascript:alert(1)' });
+  const ok = createCertification({ name: 'AWS', url: 'credly.com/badges/abc' });
+  cv.certifications.push(cert, ok);
+  assert.deepEqual(Object.keys(validateCV(cv)).sort(), [`certifications.${cert.id}.name`, `certifications.${cert.id}.url`]);
+});
+
+test('idioma: nombre y nivel obligatorios', () => {
+  const cv = validCV();
+  const lang = createLanguage();
+  cv.languages.push(lang, createLanguage({ name: 'Inglés', level: 'b2' }));
+  assert.deepEqual(Object.keys(validateCV(cv)).sort(), [`languages.${lang.id}.level`, `languages.${lang.id}.name`]);
 });
