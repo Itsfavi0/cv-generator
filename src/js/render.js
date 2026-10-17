@@ -3,7 +3,7 @@
 
 import { el } from './utils/dom.js';
 import { SKILL_GROUPS, languageLevelLabel } from './model.js';
-import { displayUrl, formatMonth, formatRange, parseDescription, toHref } from './utils/format.js';
+import { displayUrl, formatMonth, formatRange, parseBullets, parseDescription, toHref } from './utils/format.js';
 
 function section(title, ...content) {
   return el('section', { class: 'cv__section' }, el('h2', { class: 'cv__section-title' }, title), ...content);
@@ -18,6 +18,11 @@ function description(text) {
     return parsed.items.map((line) => el('p', { class: 'cv__text' }, line));
   }
   return null;
+}
+
+function bullets(text) {
+  const items = parseBullets(text);
+  return items.length ? el('ul', { class: 'cv__bullets' }, items.map((item) => el('li', {}, item))) : null;
 }
 
 function contactList(personal) {
@@ -45,7 +50,7 @@ function experienceItem(item) {
       range && el('span', { class: 'cv__entry-date' }, range),
     ),
     place && el('p', { class: 'cv__entry-sub' }, place),
-    description(item.description),
+    bullets(item.description),
   );
 }
 

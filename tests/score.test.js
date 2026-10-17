@@ -10,7 +10,7 @@ test('los criterios suman 100 puntos', () => {
 test('un CV vacío puntúa 0 y recibe todos los consejos', () => {
   const { score, tips } = scoreCV(createEmptyCV());
   assert.equal(score, 0);
-  assert.equal(tips.length, 9);
+  assert.equal(tips.length, 10);
 });
 
 test('el CV de ejemplo puntúa 100 y no tiene consejos', () => {
@@ -50,4 +50,16 @@ test('las habilidades blandas no cuentan para el criterio de 5 habilidades', () 
   const { score, tips } = scoreCV(cv);
   assert.equal(score, 90);
   assert.deepEqual(tips, ['Lista al menos 5 habilidades técnicas o herramientas.']);
+});
+
+test('logros: al menos 2 viñetas por experiencia y ninguna de más de 200 caracteres', () => {
+  const cv = sampleCV();
+  cv.experience[1].description = 'Desarrollé 12 landing pages responsivas';
+  assert.deepEqual(scoreCV(cv), { score: 95, tips: ['Escribe al menos 2 logros en cada experiencia, uno por línea.'] });
+
+  cv.experience[1].description = `Desarrollé 12 landing pages\n${'x'.repeat(201)}`;
+  assert.deepEqual(scoreCV(cv), {
+    score: 95,
+    tips: ['Acorta las viñetas de más de 200 caracteres: una idea por línea.'],
+  });
 });

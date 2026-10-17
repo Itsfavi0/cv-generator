@@ -311,6 +311,10 @@ abbr[title] {
   font-size: 12.5px;
 }
 
+.field__hint.is-warning {
+  color: var(--warning);
+}
+
 .field--inline {
   display: flex;
   align-items: center;

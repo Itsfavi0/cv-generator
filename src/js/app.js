@@ -14,10 +14,10 @@ import {
   sampleCV,
 } from './model.js';
 import { renderCV } from './render.js';
-import { scoreCV, scoreLabel } from './score.js';
+import { BULLET_RULES, scoreCV, scoreLabel } from './score.js';
 import { clearCV, loadCV, saveCV } from './storage.js';
 import { debounce, el } from './utils/dom.js';
-import { slugify } from './utils/format.js';
+import { parseBullets, slugify } from './utils/format.js';
 import { validateCV } from './validation.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -108,9 +108,32 @@ function renderScore() {
   );
 }
 
+/** Resumen bajo cada "Logros y responsabilidades": cuántas viñetas hay y qué mejorar. Solo orienta. */
+function bulletsHint(text) {
+  const items = parseBullets(text);
+  if (items.length === 0) return { message: 'Cada línea será una viñeta en el CV.', warn: false };
+  const parts = [items.length === 1 ? '1 viñeta' : `${items.length} viñetas`];
+  if (items.length < BULLET_RULES.min) parts.push(`añade al menos ${BULLET_RULES.min}`);
+  const long = items.filter((line) => line.length > BULLET_RULES.maxLength).length;
+  if (long) parts.push(`${long} con más de ${BULLET_RULES.maxLength} caracteres`);
+  return { message: parts.join(' · '), warn: parts.length > 1 };
+}
+
+function renderBulletHints() {
+  for (const entry of $('#experience-list').children) {
+    const item = cv.experience.find((job) => job.id === entry.dataset.id);
+    const slot = $('[data-bullets-hint]', entry);
+    if (!item || !slot) continue;
+    const { message, warn } = bulletsHint(item.description);
+    slot.textContent = message;
+    slot.classList.toggle('is-warning', warn);
+  }
+}
+
 function update() {
   errors = validateCV(cv);
   renderErrors();
+  renderBulletHints();
   renderScore();
   $('#summary-count').textContent = cv.summary.trim().length;
   schedulePreview();

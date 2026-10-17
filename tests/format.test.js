@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { displayUrl, formatMonth, formatRange, parseDescription, slugify, toHref } from '../src/js/utils/format.js';
+import { displayUrl, formatMonth, formatRange, parseBullets, parseDescription, slugify, toHref } from '../src/js/utils/format.js';
 
 test('formatMonth convierte AAAA-MM a texto corto en español', () => {
   assert.equal(formatMonth('2024-03'), 'mar 2024');
@@ -39,6 +39,17 @@ test('parseDescription detecta viñetas, texto y vacío', () => {
   assert.deepEqual(parseDescription('Línea uno\r\n\r\nLínea dos'), { type: 'text', items: ['Línea uno', 'Línea dos'] });
   assert.deepEqual(parseDescription('   \n  '), { type: 'empty', items: [] });
   assert.deepEqual(parseDescription(undefined), { type: 'empty', items: [] });
+});
+
+test('parseBullets: cada línea no vacía es una viñeta, con o sin guion', () => {
+  assert.deepEqual(parseBullets('Migré el catálogo\r\n\n- Creé 25 componentes\n* Lideré a 3\n•Automaticé\n  -  '), [
+    'Migré el catálogo',
+    'Creé 25 componentes',
+    'Lideré a 3',
+    'Automaticé',
+  ]);
+  assert.deepEqual(parseBullets(''), []);
+  assert.deepEqual(parseBullets(undefined), []);
 });
 
 test('slugify quita tildes y símbolos', () => {

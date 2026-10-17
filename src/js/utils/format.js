@@ -53,6 +53,17 @@ export function parseDescription(text) {
   return { type: 'text', items: lines };
 }
 
+/**
+ * Logros de una experiencia: cada línea no vacía es una viñeta, empiece o no con "-", "*" o "•".
+ * Así el formato estándar de viñetas no depende de que el usuario conozca el truco del guion.
+ */
+export function parseBullets(text) {
+  return (text ?? '')
+    .split(/\r?\n/)
+    .map((line) => line.trim().replace(/^[-*•]\s*/, '').trim())
+    .filter(Boolean);
+}
+
 /** Nombre de archivo seguro a partir del nombre de la persona. */
 export function slugify(text) {
   return (text ?? '')

@@ -1,6 +1,13 @@
 // Puntaje del CV: cada criterio suma puntos y, si no se cumple, deja un consejo concreto.
 
+import { parseBullets } from './utils/format.js';
+
 const filled = (value) => Boolean((value ?? '').trim());
+
+// Reglas de estilo de los logros. Son consejos del puntaje, no errores: nunca bloquean el PDF.
+export const BULLET_RULES = { min: 2, maxLength: 200 };
+
+const bulletsOf = (cv) => cv.experience.map((item) => parseBullets(item.description));
 
 const CRITERIA = [
   {
@@ -32,10 +39,16 @@ const CRITERIA = [
     tip: 'Agrega al menos una experiencia (prácticas y proyectos personales también cuentan).',
   },
   {
-    points: 10,
+    points: 5,
+    test: (cv) => cv.experience.length > 0 && bulletsOf(cv).every((items) => items.length >= BULLET_RULES.min),
+    tip: `Escribe al menos ${BULLET_RULES.min} logros en cada experiencia, uno por línea.`,
+  },
+  {
+    points: 5,
     test: (cv) =>
-      cv.experience.length > 0 && cv.experience.every((item) => item.description.trim().length >= 80),
-    tip: 'Describe cada experiencia con al menos 80 caracteres de logros concretos.',
+      cv.experience.length > 0 &&
+      bulletsOf(cv).every((items) => items.every((line) => line.length <= BULLET_RULES.maxLength)),
+    tip: `Acorta las viñetas de más de ${BULLET_RULES.maxLength} caracteres: una idea por línea.`,
   },
   {
     points: 5,

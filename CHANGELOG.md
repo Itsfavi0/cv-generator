@@ -14,6 +14,9 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ### Cambiado
 
+- En la experiencia, cada línea de "Logros y responsabilidades" es una viñeta, empiece o no con guion. Bajo el campo se indica cuántas viñetas hay y si conviene añadir más o acortar alguna.
+- El criterio de puntaje "80 caracteres por experiencia" se reemplaza por dos: al menos 2 logros por experiencia y ninguna viñeta de más de 200 caracteres.
+
 - El criterio de puntaje de "5 habilidades" cuenta solo las técnicas.
 - Los CV guardados o exportados con la v1.0.0 se siguen cargando: sus habilidades pasan a "técnicas".
 - La plantilla Minimalista tiene márgenes y espacios entre secciones algo menores, para que el ejemplo quepa en una página.
