@@ -6,3 +6,6 @@ Thumbs.db
 # Archivos exportados al probar la app
 cv-*.json
 *.pdf
+# Notas locales para sesiones de Claude
+CLAUDE.md
+PROGRESS.md
