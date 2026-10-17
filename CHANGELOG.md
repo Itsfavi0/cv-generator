@@ -10,7 +10,11 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 - Sección opcional de **Certificaciones**: nombre, entidad emisora, fecha y enlace a la credencial (el nombre enlaza a ella en el PDF).
 - Sección opcional de **Idiomas** con niveles de una lista cerrada (Nativo y C2–A1 del MCER).
 - **Habilidades en dos grupos**: técnicas/herramientas y blandas (opcionales, máx. 6), con subtítulos en el CV solo cuando hay de los dos tipos.
-- El CV de ejemplo incluye certificaciones, idiomas y habilidades blandas, y sigue cabiendo en una página A4 con las 4 plantillas.
+- Sección opcional de **Proyectos**: nombre, enlace, tecnologías, fechas y logros en viñetas.
+- Campo de **LinkedIn** separado de la web, con validación de que sea un perfil de linkedin.com.
+- **Comparar con una oferta**: palabras clave de la descripción del puesto que están y que faltan en el CV.
+- **Aviso de longitud**: número de páginas A4 que ocupará el PDF, con aviso a partir de 3.
+- El CV de ejemplo incluye proyecto, LinkedIn, certificación, idiomas y habilidades blandas, y sigue cabiendo en una página A4 con las 4 plantillas.
 
 ### Cambiado
 
@@ -19,11 +23,14 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 - El criterio de puntaje de "5 habilidades" cuenta solo las técnicas.
 - Los CV guardados o exportados con la v1.0.0 se siguen cargando: sus habilidades pasan a "técnicas".
-- La plantilla Minimalista tiene márgenes y espacios entre secciones algo menores, para que el ejemplo quepa en una página.
+- La plantilla Minimalista tiene márgenes, espacios e interlineado algo menores, para que el ejemplo quepa en una página.
+- El criterio de puntaje de ciudad y enlace acepta LinkedIn o web.
 
 ### Corregido
 
 - Los avisos sin botón de acción mostraban el texto "null" (p. ej. "Ejemplo cargado null").
+- Al imprimir, la página 2 empezaba pegada al borde superior; ahora repite el margen de la plantilla.
+- Una entrada muy larga saltaba entera a la página siguiente y dejaba media página en blanco; ahora se parte entre viñetas.
 
 ## [1.0.0] - 2026-10-16
 

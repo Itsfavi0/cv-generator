@@ -11,10 +11,14 @@
 - **Vista previa en vivo**: cada tecla actualiza el CV al instante.
 - **4 plantillas**: Clásica (serif, centrada), Moderna (barra lateral de color), Minimalista (versalitas y mucho aire) y Ejecutiva (encabezado oscuro, dos columnas), con **color de acento** a elección.
 - **Puntaje de calidad (0–100)** con consejos concretos para mejorarlo (se muestran los 3 primeros pendientes): resumen de 150–600 caracteres, al menos 2 logros por experiencia, viñetas de 200 caracteres como máximo, logros cuantificados, al menos 5 habilidades técnicas, etc.
-- **Validación amable**: los errores aparecen al salir del campo, no mientras escribes. Nombre y email obligatorios; teléfono, web y fechas se comprueban.
+- **Validación amable**: los errores aparecen al salir del campo, no mientras escribes. Nombre y email obligatorios; teléfono, LinkedIn, web y fechas se comprueban.
+- **Comparar con una oferta**: pegas la descripción del puesto y ves qué palabras clave de la oferta ya están en tu CV y cuáles faltan, con el porcentaje de coincidencia. Todo en el navegador.
+- **Aviso de longitud**: cuenta las páginas A4 que ocupará el PDF y avisa si pasa de 2, el máximo habitual en procesos de selección.
 - **Exportar a PDF** con la impresión nativa del navegador, en A4 y sin márgenes. El texto se puede seleccionar y copiar. `Ctrl+P` también pasa por la validación antes de imprimir.
-- **Experiencia y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. En la experiencia, **cada línea de logros es una viñeta** (con o sin guion) y bajo el campo se ve cuántas hay y qué mejorar.
+- **Experiencia, proyectos y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. En experiencia y proyectos, **cada línea de logros es una viñeta** (con o sin guion) y bajo el campo se ve cuántas hay y qué mejorar.
 - **Habilidades en dos grupos**, técnicas/herramientas y blandas (opcionales, máx. 6), como etiquetas: Enter para añadir, varias a la vez separadas por comas y sin duplicados entre grupos.
+- **Proyectos** como sección opcional (nombre, enlace, tecnologías, fechas y logros), pensada para perfiles junior.
+- **LinkedIn** en su propio campo, separado de la web o el portafolio.
 - **Certificaciones e idiomas** como secciones opcionales: la certificación lleva entidad emisora, fecha y enlace a la credencial; el idioma se elige de una lista cerrada de niveles con su equivalente MCER ("Intermedio alto (B2)"). Si están vacías no aparecen en el CV ni restan puntaje.
 - **Guardado automático** en `localStorage`. **Importa y exporta** tus datos en JSON.
 - **Modo claro y oscuro** (sigue al sistema o se elige con ◐) y diseño **responsivo** hasta 375 px.
@@ -59,7 +63,7 @@ También funciona sin cambios en GitHub Pages (*Settings → Pages → Deploy fr
 npm test
 ```
 
-Hay 46 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador (Chrome y Safari de iPhone), incluidos el ancho de 375 px y la impresión de las 4 plantillas en A4.
+Hay 58 pruebas sobre la lógica pura: formato de fechas y URLs, validación, puntaje, conteo de páginas, comparación con ofertas, saneamiento de datos importados y almacenamiento (con un `localStorage` simulado y otro que lanza errores). La interfaz se verificó a mano en el navegador (Chrome y Safari de iPhone), incluidos el ancho de 375 px y la impresión de las 4 plantillas en A4.
 
 ## Estructura
 
@@ -72,6 +76,7 @@ cv-generator/
 │   │   ├── model.js       # Forma de los datos, normalizeCV (saneamiento), ejemplo
 │   │   ├── validation.js  # validateCV → { "ruta.del.campo": "mensaje" }
 │   │   ├── score.js       # Criterios del puntaje y consejos
+│   │   ├── keywords.js    # Palabras clave de una oferta y comparación con el CV
 │   │   ├── storage.js     # loadCV / saveCV / clearCV con storage inyectable
 │   │   ├── render.js      # Genera el HTML del CV (igual para todas las plantillas)
 │   │   └── utils/         # el() para crear nodos, debounce y funciones de formato
@@ -96,13 +101,14 @@ cv-generator/
 - **Las plantillas se adaptan al ancho de la hoja, no al de la ventana** (`container-type: inline-size`). En móvil, la barra lateral de la Moderna pasa debajo; al imprimir siempre se ve el diseño A4 completo.
 - **Habilidades técnicas y blandas separadas, pero no iguales.** Los ATS filtran sobre todo por palabras clave técnicas, y un reclutador cree más una habilidad blanda cuando la ve demostrada en un logro que en una lista. Por eso las blandas son opcionales y como máximo 6, y el puntaje solo cuenta las técnicas. En el CV van en una sola sección "Habilidades" con subtítulos en texto, que un ATS lee como cualquier otra línea. Los datos de la v1.0.0 (un solo array) se migran solos a "técnicas".
 - **Logros siempre en viñetas, con avisos que no bloquean.** Las viñetas son el formato estándar de la experiencia, así que cada línea se convierte en una sin exigir el guion. Las reglas de estilo (al menos 2 logros, máximo 200 caracteres por viñeta) aparecen bajo el campo y en el puntaje, pero nunca impiden descargar el PDF: solo los datos incorrectos (un email inválido) lo hacen. El resumen del perfil sigue siendo un párrafo.
+- **Comparar con una oferta sin IA ni servidor.** `keywords.js` extrae las palabras más repetidas de la oferta, descarta conectores y el vocabulario genérico de los avisos ("buscamos", "requisitos", "años") y las busca en el texto del CV. Ignora tildes, mayúsculas, plurales y el femenino en "-ora" (la oferta pide "Desarrollador" y el CV dice "Desarrolladora"). Es una heurística, como el primer filtro de muchos ATS, y por eso el aviso pide añadir solo lo que la persona de verdad sabe.
+- **Contar páginas con una copia invisible del CV.** La vista previa cambia de diseño en pantallas estrechas, así que medirla daría otro número. Se renderiza una copia oculta a 210 mm de ancho y se divide su alto por el de una hoja A4. Al imprimir, una entrada larga se puede partir entre páginas (sin separar su encabezado de la primera viñeta) y el relleno de la plantilla se repite en cada página con `box-decoration-break: clone`, para que la página 2 no empiece pegada al borde.
 - **Idiomas en una sola línea de texto.** "Inglés: Intermedio alto (B2)" se escribe como un único texto sin mezclar negrita y normal: al extraer el texto del PDF, los estilos distintos se separaban y el nivel quedaba lejos del idioma. El nivel incluye el código MCER para que coincida tanto con "Intermedio" como con "B2" en un filtro.
 - **Límites razonables** (120 caracteres por campo corto, 2000 en descripciones, 20 entradas por sección, 30 habilidades, JSON de 1 MB como máximo) para que un archivo importado no bloquee la página.
 
 ## Ideas futuras
 
 - Botón "Ver vista previa" fijo en móvil, porque ahora la hoja queda debajo de todo el formulario.
-- Más secciones opcionales: proyectos.
 - Elegir la tipografía de cada plantilla.
 - Reordenar las entradas arrastrándolas, además de con los botones ↑ ↓.
 - Tests de interfaz con Playwright.
