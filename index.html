@@ -90,6 +90,13 @@
         </fieldset>
 
         <fieldset class="card">
+          <legend class="card__title">Proyectos <span class="card__optional">opcional</span></legend>
+          <p class="field__hint card__intro">Personales, académicos o de código abierto. Con poca experiencia, son tu mejor prueba.</p>
+          <div class="entries" id="projects-list" data-list="projects"></div>
+          <button type="button" class="btn btn--dashed" data-add="projects">+ Añadir proyecto</button>
+        </fieldset>
+
+        <fieldset class="card">
           <legend class="card__title">Educación</legend>
           <div class="entries" id="education-list" data-list="education"></div>
           <button type="button" class="btn btn--dashed" data-add="education">+ Añadir educación</button>
@@ -240,6 +247,49 @@
             <small class="field__error" data-error-field="end"></small>
           </label>
         </div>
+      </div>
+    </template>
+
+    <template id="tpl-projects">
+      <div class="entry">
+        <div class="entry__toolbar">
+          <span class="entry__index"></span>
+          <div class="entry__buttons">
+            <button type="button" class="btn btn--icon btn--sm" data-action="up" aria-label="Subir">↑</button>
+            <button type="button" class="btn btn--icon btn--sm" data-action="down" aria-label="Bajar">↓</button>
+            <button type="button" class="btn btn--icon btn--sm btn--danger" data-action="remove" aria-label="Eliminar">✕</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">Nombre del proyecto *</span>
+            <input data-field="name" maxlength="120" />
+            <small class="field__error" data-error-field="name"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Enlace (repositorio o demo)</span>
+            <input data-field="url" maxlength="120" placeholder="github.com/usuario/proyecto" />
+            <small class="field__error" data-error-field="url"></small>
+          </label>
+          <label class="field">
+            <span class="field__label">Inicio</span>
+            <input data-field="start" type="month" />
+          </label>
+          <label class="field">
+            <span class="field__label">Fin</span>
+            <input data-field="end" type="month" />
+            <small class="field__error" data-error-field="end"></small>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field__label">Tecnologías</span>
+          <input data-field="technologies" maxlength="120" placeholder="React, Node.js, PostgreSQL" />
+        </label>
+        <label class="field">
+          <span class="field__label">Qué hiciste y qué lograste</span>
+          <textarea data-field="description" rows="3" maxlength="2000" placeholder="Un logro por línea: cada línea será una viñeta&#10;Usa números: «300 usuarios al mes»"></textarea>
+          <small class="field__hint" data-bullets-hint aria-live="polite"></small>
+        </label>
       </div>
     </template>
 

@@ -221,6 +221,10 @@ abbr[title] {
   clear: both;
 }
 
+.card__intro {
+  margin: 0 0 12px;
+}
+
 .card__optional {
   margin-left: 6px;
   font-size: 11px;

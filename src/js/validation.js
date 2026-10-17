@@ -65,6 +65,17 @@ export function validateCV(cv) {
     }
   }
 
+  for (const item of cv.projects) {
+    const key = `projects.${item.id}`;
+    if (blank(item.name)) errors[`${key}.name`] = 'Indica el nombre del proyecto.';
+    if (!blank(item.url) && !isValidUrl(item.url)) {
+      errors[`${key}.url`] = 'Escribe una URL válida (ej. github.com/usuario/proyecto).';
+    }
+    if (item.start && item.end && item.end < item.start) {
+      errors[`${key}.end`] = 'La fecha de fin no puede ser anterior al inicio.';
+    }
+  }
+
   for (const item of cv.education) {
     const key = `education.${item.id}`;
     if (blank(item.degree)) errors[`${key}.degree`] = 'Indica el título o carrera.';

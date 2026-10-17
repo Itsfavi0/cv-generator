@@ -65,6 +65,19 @@ export function createEducation(data = {}) {
   };
 }
 
+export function createProject(data = {}) {
+  return {
+    id: uid(),
+    name: '',
+    url: '',
+    technologies: '',
+    start: '',
+    end: '',
+    description: '',
+    ...data,
+  };
+}
+
 export function createCertification(data = {}) {
   return {
     id: uid(),
@@ -100,6 +113,7 @@ export function createEmptyCV() {
     },
     summary: '',
     experience: [],
+    projects: [],
     education: [],
     certifications: [],
     languages: [],
@@ -138,6 +152,19 @@ export function normalizeCV(raw) {
         start: month(item.start),
         end: month(item.end),
         current: item.current === true,
+        description: str(item.description, LIMITS.long),
+      }),
+    );
+
+  base.projects = list(raw.projects)
+    .filter((item) => item && typeof item === 'object')
+    .map((item) =>
+      createProject({
+        name: str(item.name),
+        url: str(item.url),
+        technologies: str(item.technologies),
+        start: month(item.start),
+        end: month(item.end),
         description: str(item.description, LIMITS.long),
       }),
     );
@@ -260,6 +287,18 @@ export function sampleCV() {
           '- Automaticé el despliegue con GitHub Actions',
       },
     ],
+    projects: [
+      {
+        name: 'Comparador de precios de mercados',
+        url: 'github.com/valeriaqr/comparador',
+        technologies: 'React, Node.js, PostgreSQL',
+        start: '2022-03',
+        end: '2022-08',
+        description:
+          'Web que compara precios de 5 mercados de Lima con datos actualizados cada día\n' +
+          'Usada por 300 personas al mes; 98 en Lighthouse de rendimiento',
+      },
+    ],
     education: [
       {
         degree: 'Ingeniería de Sistemas',
@@ -270,7 +309,6 @@ export function sampleCV() {
     ],
     certifications: [
       { name: 'AWS Certified Cloud Practitioner', issuer: 'Amazon Web Services', date: '2024-05' },
-      { name: 'Scrum Foundation Professional Certificate', issuer: 'CertiProf', date: '2023-08' },
     ],
     languages: [
       { name: 'Español', level: 'native' },

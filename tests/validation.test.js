@@ -1,6 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createCertification, createEducation, createEmptyCV, createExperience, createLanguage } from '../src/js/model.js';
+import {
+  createCertification,
+  createEducation,
+  createEmptyCV,
+  createExperience,
+  createLanguage,
+  createProject,
+} from '../src/js/model.js';
 import { isValidEmail, isValidLinkedIn, isValidPhone, isValidUrl, validateCV } from '../src/js/validation.js';
 
 function validCV() {
@@ -113,4 +120,15 @@ test('LinkedIn opcional, pero válido si se indica', () => {
   assert.deepEqual(Object.keys(validateCV(cv)), ['personal.linkedin']);
   cv.personal.linkedin = 'linkedin.com/in/ana';
   assert.deepEqual(validateCV(cv), {});
+});
+
+test('proyecto: nombre obligatorio, enlace válido y fechas coherentes', () => {
+  const cv = validCV();
+  const project = createProject({ url: 'no es url', start: '2024-05', end: '2024-01' });
+  cv.projects.push(project, createProject({ name: 'App', url: 'github.com/a/app' }));
+  assert.deepEqual(Object.keys(validateCV(cv)).sort(), [
+    `projects.${project.id}.end`,
+    `projects.${project.id}.name`,
+    `projects.${project.id}.url`,
+  ]);
 });

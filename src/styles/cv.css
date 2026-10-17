@@ -305,8 +305,8 @@
 /* ---------- Minimalista: aire, versalitas y habilidades separadas por "·" ---------- */
 
 .cv--minimal {
-  padding: 18mm 22mm 14mm;
-  line-height: 1.55;
+  padding: 16mm 22mm 14mm;
+  line-height: 1.5;
 }
 
 .cv--minimal .cv__name {
@@ -325,16 +325,16 @@
 }
 
 .cv--minimal .cv__body {
-  gap: 18pt;
-  margin-top: 22pt;
+  gap: 16pt;
+  margin-top: 20pt;
 }
 
 .cv--minimal .cv__main {
-  gap: 18pt;
+  gap: 16pt;
 }
 
 .cv--minimal .cv__section-title {
-  margin-bottom: 9pt;
+  margin-bottom: 7pt;
   font-size: 10pt;
   font-weight: 600;
   font-variant: small-caps;

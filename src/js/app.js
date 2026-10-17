@@ -9,6 +9,7 @@ import {
   createEmptyCV,
   createExperience,
   createLanguage,
+  createProject,
   moveItem,
   normalizeCV,
   sampleCV,
@@ -30,6 +31,7 @@ const toastEl = $('#toast');
 // contenedor [data-list] y botón [data-add]. `removed` va aparte por el género ("Idioma eliminado").
 const LISTS = {
   experience: { create: createExperience, label: 'Experiencia', removed: 'Experiencia eliminada' },
+  projects: { create: createProject, label: 'Proyecto', removed: 'Proyecto eliminado' },
   education: { create: createEducation, label: 'Educación', removed: 'Educación eliminada' },
   certifications: { create: createCertification, label: 'Certificación', removed: 'Certificación eliminada' },
   languages: { create: createLanguage, label: 'Idioma', removed: 'Idioma eliminado' },
@@ -120,8 +122,8 @@ function bulletsHint(text) {
 }
 
 function renderBulletHints() {
-  for (const entry of $('#experience-list').children) {
-    const item = cv.experience.find((job) => job.id === entry.dataset.id);
+  for (const entry of form.querySelectorAll('.entry:has([data-bullets-hint])')) {
+    const item = cv[entry.parentElement.dataset.list].find((i) => i.id === entry.dataset.id);
     const slot = $('[data-bullets-hint]', entry);
     if (!item || !slot) continue;
     const { message, warn } = bulletsHint(item.description);

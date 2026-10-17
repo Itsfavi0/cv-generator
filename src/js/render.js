@@ -60,6 +60,27 @@ function experienceItem(item) {
   );
 }
 
+function projectItem(item) {
+  const href = toHref(item.url);
+  const name = item.name || 'Proyecto';
+  const range = formatRange(item.start, item.end);
+  const technologies = item.technologies.trim();
+  return el(
+    'article',
+    { class: 'cv__entry' },
+    el(
+      'header',
+      { class: 'cv__entry-head' },
+      el('h3', { class: 'cv__entry-title' }, name),
+      range && el('span', { class: 'cv__entry-date' }, range),
+    ),
+    // El enlace va en texto (no solo en el nombre) para que se lea en papel y lo vea un ATS.
+    href && el('p', { class: 'cv__entry-sub' }, el('a', { href, target: '_blank', rel: 'noopener' }, displayUrl(item.url))),
+    technologies && el('p', { class: 'cv__entry-sub' }, `Tecnologías: ${technologies}`),
+    bullets(item.description),
+  );
+}
+
 function educationItem(item) {
   const range = formatRange(item.start, item.end);
   return el(
@@ -124,6 +145,7 @@ export function renderCV(cv, container) {
     { class: 'cv__main' },
     cv.summary.trim() && section('Perfil', description(cv.summary)),
     cv.experience.length > 0 && section('Experiencia', cv.experience.map(experienceItem)),
+    cv.projects.length > 0 && section('Proyectos', cv.projects.map(projectItem)),
     cv.education.length > 0 && section('Educación', cv.education.map(educationItem)),
     cv.certifications.length > 0 && section('Certificaciones', cv.certifications.map(certificationItem)),
   );

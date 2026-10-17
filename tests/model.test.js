@@ -77,6 +77,7 @@ test('normalizeCV conserva un CV válido (ida y vuelta por JSON)', () => {
   const withoutIds = (cv) => ({
     ...cv,
     experience: strip(cv.experience),
+    projects: strip(cv.projects),
     education: strip(cv.education),
     certifications: strip(cv.certifications),
     languages: strip(cv.languages),
@@ -136,6 +137,20 @@ test('languageLevelLabel incluye el nivel MCER y tolera ids desconocidos', () =>
   assert.equal(languageLevelLabel('native'), 'Nativo');
   assert.equal(languageLevelLabel('zz'), '');
   assert.equal(new Set(LANGUAGE_LEVELS.map((l) => l.id)).size, LANGUAGE_LEVELS.length);
+});
+
+test('normalizeCV sanea proyectos', () => {
+  const cv = normalizeCV({
+    projects: [5, { name: 'App', url: 'github.com/a/app', technologies: 'React', start: '2024-02', end: 'mañana', description: 'x'.repeat(3000), hack: 1 }],
+  });
+  assert.equal(cv.projects.length, 1);
+  const [project] = cv.projects;
+  assert.equal(project.name, 'App');
+  assert.equal(project.start, '2024-02');
+  assert.equal(project.end, '');
+  assert.equal(project.description.length, 2000);
+  assert.equal('hack' in project, false);
+  assert.deepEqual(normalizeCV({}).projects, []);
 });
 
 test('addSkill evita vacíos y duplicados sin distinguir mayúsculas, también entre grupos', () => {
