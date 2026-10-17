@@ -164,6 +164,17 @@
           <p class="score-card__pages" id="page-count" aria-live="polite"></p>
         </div>
 
+        <details class="offer-card card" id="offer-card">
+          <summary class="offer-card__summary">Comparar con una oferta</summary>
+          <div class="offer-card__body">
+            <p class="field__hint">
+              Pega la descripción del puesto y verás qué palabras clave de la oferta faltan en tu CV. El texto no sale de tu navegador.
+            </p>
+            <textarea id="offer-input" rows="5" maxlength="10000" aria-label="Descripción de la oferta" placeholder="Pega aquí el texto de la oferta de empleo"></textarea>
+            <div class="offer-card__result" id="offer-result" aria-live="polite"></div>
+          </div>
+        </details>
+
         <div class="cv-page" id="cv-preview"></div>
       </section>
     </main>
