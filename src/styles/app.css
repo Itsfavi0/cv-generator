@@ -481,6 +481,26 @@ input[type='color'] {
 
 /* ---------- Habilidades ---------- */
 
+.skill-group {
+  display: grid;
+  gap: 4px;
+}
+
+.skill-group + .skill-group {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.skill-group .field__hint {
+  margin-bottom: 4px;
+}
+
+.field__optional {
+  margin-left: 4px;
+  font-weight: 400;
+}
+
 .skill-input {
   display: flex;
   gap: 8px;
@@ -490,7 +510,7 @@ input[type='color'] {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   padding: 0;
   list-style: none;
 }

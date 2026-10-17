@@ -1,6 +1,7 @@
 import {
   LANGUAGE_LEVELS,
   LIMITS,
+  SKILL_GROUPS,
   TEMPLATES,
   addSkill,
   createCertification,
@@ -141,17 +142,21 @@ function renderEntries(listName) {
   $(`#${listName}-list`).replaceChildren(...items.map((item, i) => buildEntry(listName, item, i, items.length)));
 }
 
+const skillGroupEl = (group) => $(`[data-skill-group="${group}"]`, form);
+
 function renderSkills() {
-  $('#skill-list').replaceChildren(
-    ...cv.skills.map((skill, i) =>
-      el(
-        'li',
-        { class: 'chip' },
-        skill,
-        el('button', { type: 'button', class: 'chip__remove', 'aria-label': `Quitar ${skill}`, dataset: { skillIndex: i } }, '×'),
+  for (const { id: group } of SKILL_GROUPS) {
+    $('[data-skill-list]', skillGroupEl(group)).replaceChildren(
+      ...cv.skills[group].map((skill, i) =>
+        el(
+          'li',
+          { class: 'chip' },
+          skill,
+          el('button', { type: 'button', class: 'chip__remove', 'aria-label': `Quitar ${skill}`, dataset: { skillIndex: i } }, '×'),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 /** Vuelca todo el estado en el formulario (al cargar, importar o reiniciar). */
@@ -254,12 +259,17 @@ form.addEventListener('click', (event) => {
     return;
   }
 
+  const skillGroup = event.target.closest('[data-skill-group]');
+  if (event.target.closest('[data-skill-add]')) {
+    commitSkill(skillGroup.dataset.skillGroup);
+    return;
+  }
   const removeSkill = event.target.closest('[data-skill-index]');
   if (removeSkill) {
-    cv.skills.splice(Number(removeSkill.dataset.skillIndex), 1);
+    cv.skills[skillGroup.dataset.skillGroup].splice(Number(removeSkill.dataset.skillIndex), 1);
     renderSkills();
     update();
-    $('#skill-input').focus();
+    $('[data-skill-input]', skillGroup).focus();
   }
 });
 
@@ -288,27 +298,30 @@ function removeEntry(listName, id) {
 
 /* ---------- Habilidades ---------- */
 
-function commitSkill() {
-  const input = $('#skill-input');
+function commitSkill(group) {
+  const input = $('[data-skill-input]', skillGroupEl(group));
   // Permite pegar varias separadas por comas: "React, Node, SQL".
-  const added = input.value.split(',').filter((skill) => addSkill(cv, skill)).length;
-  if (input.value.trim() && added === 0) toast('Esa habilidad ya está en la lista (máx. 30).');
+  const added = input.value.split(',').filter((skill) => addSkill(cv, group, skill)).length;
+  if (input.value.trim() && added === 0) {
+    toast(`Esa habilidad ya está en tu CV o llegaste al máximo (${LIMITS.skills[group]}).`);
+  }
   input.value = '';
   renderSkills();
   update();
 }
 
-$('#skill-input').addEventListener('keydown', (event) => {
+form.addEventListener('keydown', (event) => {
+  if (!event.target.matches('[data-skill-input]')) return;
+  const group = event.target.closest('[data-skill-group]').dataset.skillGroup;
   if (event.key === 'Enter') {
     event.preventDefault();
-    commitSkill();
-  } else if (event.key === 'Backspace' && !event.target.value && cv.skills.length) {
-    cv.skills.pop();
+    commitSkill(group);
+  } else if (event.key === 'Backspace' && !event.target.value && cv.skills[group].length) {
+    cv.skills[group].pop();
     renderSkills();
     update();
   }
 });
-$('#btn-add-skill').addEventListener('click', commitSkill);
 
 /* ---------- Idiomas ---------- */
 

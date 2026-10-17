@@ -189,6 +189,18 @@
   font-size: 9pt;
 }
 
+/* Subgrupos de habilidades ("Técnicas", "Blandas"). El color se hereda para que
+   también se lean sobre la barra lateral de color de la Moderna. */
+.cv__skill-group + .cv__skill-group {
+  margin-top: 8pt;
+}
+
+.cv__subsection-title {
+  margin-bottom: 4pt;
+  font-size: 9.5pt;
+  font-weight: 650;
+}
+
 /* "Inglés: Intermedio alto (B2)", una línea por idioma. */
 .cv__languages {
   display: flex;
@@ -293,7 +305,7 @@
 /* ---------- Minimalista: aire, versalitas y habilidades separadas por "·" ---------- */
 
 .cv--minimal {
-  padding: 22mm 22mm 18mm;
+  padding: 18mm 22mm 14mm;
   line-height: 1.55;
 }
 
@@ -313,12 +325,12 @@
 }
 
 .cv--minimal .cv__body {
-  gap: 22pt;
-  margin-top: 26pt;
+  gap: 18pt;
+  margin-top: 22pt;
 }
 
 .cv--minimal .cv__main {
-  gap: 22pt;
+  gap: 18pt;
 }
 
 .cv--minimal .cv__section-title {

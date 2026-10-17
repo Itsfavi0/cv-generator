@@ -43,3 +43,11 @@ test('scoreLabel por tramos', () => {
   assert.equal(scoreLabel(85), 'Excelente');
   assert.equal(scoreLabel(100), 'Excelente');
 });
+
+test('las habilidades blandas no cuentan para el criterio de 5 habilidades', () => {
+  const cv = sampleCV();
+  cv.skills = { technical: ['JS', 'CSS'], soft: ['Comunicación', 'Liderazgo', 'Empatía', 'Negociación'] };
+  const { score, tips } = scoreCV(cv);
+  assert.equal(score, 90);
+  assert.deepEqual(tips, ['Lista al menos 5 habilidades técnicas o herramientas.']);
+});

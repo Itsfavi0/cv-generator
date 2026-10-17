@@ -25,8 +25,16 @@ export const LIMITS = {
   short: 120,
   long: 2000,
   entries: 20,
-  skills: 30,
+  skill: 40,
+  // Pocas blandas a propósito: un reclutador las cree más si aparecen demostradas en los logros
+  // que en una lista larga, y los ATS filtran sobre todo por palabras clave técnicas.
+  skills: { technical: 30, soft: 6 },
 };
+
+export const SKILL_GROUPS = [
+  { id: 'technical', label: 'Técnicas' },
+  { id: 'soft', label: 'Blandas' },
+];
 
 export function uid() {
   return globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2, 12);
@@ -94,7 +102,7 @@ export function createEmptyCV() {
     education: [],
     certifications: [],
     languages: [],
-    skills: [],
+    skills: { technical: [], soft: [] },
   };
 }
 
@@ -164,27 +172,37 @@ export function normalizeCV(raw) {
       }),
     );
 
+  // La v1.0.0 guardaba las habilidades como un solo array: pasan a ser técnicas.
+  const rawSkills = Array.isArray(raw.skills) ? { technical: raw.skills } : raw.skills ?? {};
+  // Un mismo conjunto para los dos grupos: una habilidad no puede estar en ambos.
   const seen = new Set();
-  base.skills = (Array.isArray(raw.skills) ? raw.skills : [])
-    .filter((skill) => typeof skill === 'string')
-    .map((skill) => skill.trim().slice(0, 40))
-    .filter((skill) => {
-      const key = skill.toLowerCase();
-      if (!skill || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .slice(0, LIMITS.skills);
+  for (const { id } of SKILL_GROUPS) {
+    base.skills[id] = (Array.isArray(rawSkills[id]) ? rawSkills[id] : [])
+      .filter((skill) => typeof skill === 'string')
+      .map((skill) => skill.trim().slice(0, LIMITS.skill))
+      .filter((skill) => {
+        const key = skill.toLowerCase();
+        if (!skill || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, LIMITS.skills[id]);
+  }
 
   return base;
 }
 
-/** Añade una habilidad evitando duplicados (sin distinguir mayúsculas). Devuelve true si se añadió. */
-export function addSkill(cv, skill) {
-  const value = (skill ?? '').trim().slice(0, 40);
-  if (!value || cv.skills.length >= LIMITS.skills) return false;
-  if (cv.skills.some((s) => s.toLowerCase() === value.toLowerCase())) return false;
-  cv.skills.push(value);
+/**
+ * Añade una habilidad al grupo ("technical" o "soft") evitando duplicados en cualquiera
+ * de los dos grupos (sin distinguir mayúsculas). Devuelve true si se añadió.
+ */
+export function addSkill(cv, group, skill) {
+  const value = (skill ?? '').trim().slice(0, LIMITS.skill);
+  const list = cv.skills[group];
+  if (!value || !list || list.length >= LIMITS.skills[group]) return false;
+  const all = [...cv.skills.technical, ...cv.skills.soft];
+  if (all.some((s) => s.toLowerCase() === value.toLowerCase())) return false;
+  list.push(value);
   return true;
 }
 
@@ -256,6 +274,9 @@ export function sampleCV() {
       { name: 'Español', level: 'native' },
       { name: 'Inglés', level: 'b2' },
     ],
-    skills: ['JavaScript', 'React', 'HTML', 'CSS', 'Git', 'SQL', 'Python', 'Accesibilidad web'],
+    skills: {
+      technical: ['JavaScript', 'React', 'HTML', 'CSS', 'Git', 'SQL', 'Python', 'Accesibilidad web'],
+      soft: ['Comunicación', 'Trabajo en equipo', 'Mentoría'],
+    },
   });
 }

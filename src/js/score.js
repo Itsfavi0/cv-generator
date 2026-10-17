@@ -49,8 +49,9 @@ const CRITERIA = [
   },
   {
     points: 10,
-    test: (cv) => cv.skills.length >= 5,
-    tip: 'Lista al menos 5 habilidades técnicas.',
+    // Solo cuentan las técnicas: son las palabras clave por las que filtran los ATS.
+    test: (cv) => cv.skills.technical.length >= 5,
+    tip: 'Lista al menos 5 habilidades técnicas o herramientas.',
   },
 ];
 

@@ -9,7 +9,14 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 - Sección opcional de **Certificaciones**: nombre, entidad emisora, fecha y enlace a la credencial (el nombre enlaza a ella en el PDF).
 - Sección opcional de **Idiomas** con niveles de una lista cerrada (Nativo y C2–A1 del MCER).
-- El CV de ejemplo incluye certificaciones e idiomas y sigue cabiendo en una página A4 con las 4 plantillas.
+- **Habilidades en dos grupos**: técnicas/herramientas y blandas (opcionales, máx. 6), con subtítulos en el CV solo cuando hay de los dos tipos.
+- El CV de ejemplo incluye certificaciones, idiomas y habilidades blandas, y sigue cabiendo en una página A4 con las 4 plantillas.
+
+### Cambiado
+
+- El criterio de puntaje de "5 habilidades" cuenta solo las técnicas.
+- Los CV guardados o exportados con la v1.0.0 se siguen cargando: sus habilidades pasan a "técnicas".
+- La plantilla Minimalista tiene márgenes y espacios entre secciones algo menores, para que el ejemplo quepa en una página.
 
 ### Corregido
 

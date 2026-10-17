@@ -42,7 +42,7 @@ test('normalizeCV descarta tipos incorrectos, campos desconocidos y valores no p
   assert.equal(cv.experience[0].current, false);
   assert.ok(cv.experience[0].id);
   assert.deepEqual(cv.education, []);
-  assert.deepEqual(cv.skills, ['JS', 'CSS']);
+  assert.deepEqual(cv.skills, { technical: ['JS', 'CSS'], soft: [] });
   assert.equal('extra' in cv, false);
 });
 
@@ -51,12 +51,16 @@ test('normalizeCV recorta textos largos y limita listas', () => {
     personal: { fullName: 'a'.repeat(500) },
     summary: 'b'.repeat(5000),
     experience: Array.from({ length: 50 }, () => ({ role: 'Dev' })),
-    skills: Array.from({ length: 50 }, (_, i) => `skill-${i}`),
+    skills: {
+      technical: Array.from({ length: 50 }, (_, i) => `skill-${i}`),
+      soft: Array.from({ length: 50 }, (_, i) => `soft-${i}`),
+    },
   });
   assert.equal(cv.personal.fullName.length, 120);
   assert.equal(cv.summary.length, 2000);
   assert.equal(cv.experience.length, 20);
-  assert.equal(cv.skills.length, 30);
+  assert.equal(cv.skills.technical.length, 30);
+  assert.equal(cv.skills.soft.length, 6);
 });
 
 test('normalizeCV acepta todas las plantillas de TEMPLATES', () => {
@@ -85,6 +89,18 @@ test('normalizeCV acepta un CV de la v1.0.0, sin certificaciones ni idiomas', ()
   assert.deepEqual(cv.certifications, []);
   assert.deepEqual(cv.languages, []);
   assert.equal(cv.personal.fullName, 'Ana');
+  assert.deepEqual(cv.skills, { technical: ['JS'], soft: [] });
+});
+
+test('normalizeCV no repite una habilidad en los dos grupos y descarta grupos inválidos', () => {
+  assert.deepEqual(normalizeCV({ skills: { technical: ['Scrum'], soft: ['scrum', 'Liderazgo'] } }).skills, {
+    technical: ['Scrum'],
+    soft: ['Liderazgo'],
+  });
+  assert.deepEqual(normalizeCV({ skills: { technical: 'JS', soft: null, hacker: ['x'] } }).skills, {
+    technical: [],
+    soft: [],
+  });
 });
 
 test('normalizeCV sanea certificaciones e idiomas', () => {
@@ -122,20 +138,25 @@ test('languageLevelLabel incluye el nivel MCER y tolera ids desconocidos', () =>
   assert.equal(new Set(LANGUAGE_LEVELS.map((l) => l.id)).size, LANGUAGE_LEVELS.length);
 });
 
-test('addSkill evita vacíos y duplicados sin distinguir mayúsculas', () => {
+test('addSkill evita vacíos y duplicados sin distinguir mayúsculas, también entre grupos', () => {
   const cv = createEmptyCV();
-  assert.equal(addSkill(cv, ' React '), true);
-  assert.equal(addSkill(cv, 'react'), false);
-  assert.equal(addSkill(cv, '   '), false);
-  assert.equal(addSkill(cv, undefined), false);
-  assert.deepEqual(cv.skills, ['React']);
+  assert.equal(addSkill(cv, 'technical', ' React '), true);
+  assert.equal(addSkill(cv, 'technical', 'react'), false);
+  assert.equal(addSkill(cv, 'soft', 'REACT'), false);
+  assert.equal(addSkill(cv, 'technical', '   '), false);
+  assert.equal(addSkill(cv, 'technical', undefined), false);
+  assert.equal(addSkill(cv, 'otro', 'Excel'), false);
+  assert.deepEqual(cv.skills, { technical: ['React'], soft: [] });
 });
 
-test('addSkill respeta el máximo de 30', () => {
+test('addSkill respeta el máximo de cada grupo (30 técnicas, 6 blandas)', () => {
   const cv = createEmptyCV();
-  for (let i = 0; i < 30; i++) addSkill(cv, `s${i}`);
-  assert.equal(addSkill(cv, 'una más'), false);
-  assert.equal(cv.skills.length, 30);
+  for (let i = 0; i < 30; i++) addSkill(cv, 'technical', `t${i}`);
+  for (let i = 0; i < 6; i++) addSkill(cv, 'soft', `s${i}`);
+  assert.equal(addSkill(cv, 'technical', 'una más'), false);
+  assert.equal(addSkill(cv, 'soft', 'una más'), false);
+  assert.equal(cv.skills.technical.length, 30);
+  assert.equal(cv.skills.soft.length, 6);
 });
 
 test('moveItem sube y baja sin salirse de los límites', () => {

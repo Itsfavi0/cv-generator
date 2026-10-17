@@ -2,7 +2,7 @@
 // el CSS (cv.css) decide cómo se ve cada una. Eso mantiene la lógica en un solo lugar.
 
 import { el } from './utils/dom.js';
-import { languageLevelLabel } from './model.js';
+import { SKILL_GROUPS, languageLevelLabel } from './model.js';
 import { displayUrl, formatMonth, formatRange, parseDescription, toHref } from './utils/format.js';
 
 function section(title, ...content) {
@@ -89,6 +89,21 @@ function languageItem(item) {
   return el('li', {}, [item.name || 'Idioma', level].filter(Boolean).join(': '));
 }
 
+// Con un solo grupo se muestra la lista sola, como antes; con los dos, cada uno con su subtítulo
+// en texto ("Técnicas", "Blandas"), que un ATS lee igual que cualquier otra línea.
+function skillsSection(skills) {
+  const groups = SKILL_GROUPS.filter(({ id }) => skills[id].length > 0);
+  if (groups.length === 0) return null;
+  const list = (items) => el('ul', { class: 'cv__skills' }, items.map((skill) => el('li', {}, skill)));
+  if (groups.length === 1) return section('Habilidades', list(skills[groups[0].id]));
+  return section(
+    'Habilidades',
+    groups.map(({ id, label }) =>
+      el('div', { class: 'cv__skill-group' }, el('h3', { class: 'cv__subsection-title' }, label), list(skills[id])),
+    ),
+  );
+}
+
 export function renderCV(cv, container) {
   const { personal } = cv;
   const isEmpty = !personal.fullName.trim();
@@ -105,8 +120,7 @@ export function renderCV(cv, container) {
   const aside = el(
     'aside',
     { class: 'cv__aside' },
-    cv.skills.length > 0 &&
-      section('Habilidades', el('ul', { class: 'cv__skills' }, cv.skills.map((skill) => el('li', {}, skill)))),
+    skillsSection(cv.skills),
     cv.languages.length > 0 && section('Idiomas', el('ul', { class: 'cv__languages' }, cv.languages.map(languageItem))),
   );
 

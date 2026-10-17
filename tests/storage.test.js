@@ -49,7 +49,7 @@ test('loadCV sanea los datos guardados', () => {
   storage.setItem(KEY, JSON.stringify({ template: 'otro', skills: 'no-array' }));
   const cv = loadCV(storage);
   assert.equal(cv.template, 'classic');
-  assert.deepEqual(cv.skills, []);
+  assert.deepEqual(cv.skills, { technical: [], soft: [] });
 });
 
 test('clearCV borra los datos', () => {

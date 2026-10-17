@@ -98,11 +98,24 @@
 
         <fieldset class="card">
           <legend class="card__title">Habilidades</legend>
-          <div class="skill-input">
-            <input id="skill-input" placeholder="Escribe una habilidad y pulsa Enter" maxlength="40" aria-label="Nueva habilidad" />
-            <button type="button" class="btn" id="btn-add-skill">Añadir</button>
+          <div class="skill-group" data-skill-group="technical">
+            <label class="field__label" for="skill-input-technical">Técnicas y herramientas</label>
+            <small class="field__hint">Lenguajes, frameworks, software. Son las palabras clave que buscan los ATS.</small>
+            <div class="skill-input">
+              <input id="skill-input-technical" data-skill-input placeholder="React, Excel, SAP… y pulsa Enter" maxlength="40" />
+              <button type="button" class="btn" data-skill-add>Añadir</button>
+            </div>
+            <ul class="chips" data-skill-list aria-label="Habilidades técnicas añadidas"></ul>
           </div>
-          <ul class="chips" id="skill-list" aria-label="Habilidades añadidas"></ul>
+          <div class="skill-group" data-skill-group="soft">
+            <label class="field__label" for="skill-input-soft">Blandas <span class="field__optional">opcional · máx. 6</span></label>
+            <small class="field__hint">Pocas y creíbles: convencen más si también se notan en tus logros.</small>
+            <div class="skill-input">
+              <input id="skill-input-soft" data-skill-input placeholder="Comunicación, liderazgo… y pulsa Enter" maxlength="40" />
+              <button type="button" class="btn" data-skill-add>Añadir</button>
+            </div>
+            <ul class="chips" data-skill-list aria-label="Habilidades blandas añadidas"></ul>
+          </div>
         </fieldset>
 
         <fieldset class="card">
