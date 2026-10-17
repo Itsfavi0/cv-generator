@@ -12,7 +12,6 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 - **Habilidades en dos grupos**: técnicas/herramientas y blandas (opcionales, máx. 6), con subtítulos en el CV solo cuando hay de los dos tipos.
 - Sección opcional de **Proyectos**: nombre, enlace, tecnologías, fechas y logros en viñetas.
 - Campo de **LinkedIn** separado de la web, con validación de que sea un perfil de linkedin.com.
-- **Comparar con una oferta**: palabras clave de la descripción del puesto que están y que faltan en el CV.
 - **Aviso de longitud**: número de páginas A4 que ocupará el PDF, con aviso a partir de 3.
 - El CV de ejemplo incluye proyecto, LinkedIn, certificación, idiomas y habilidades blandas, y sigue cabiendo en una página A4 con las 4 plantillas.
 

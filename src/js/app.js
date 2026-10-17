@@ -14,7 +14,6 @@ import {
   normalizeCV,
   sampleCV,
 } from './model.js';
-import { compareWithOffer } from './keywords.js';
 import { renderCV } from './render.js';
 import { BULLET_RULES, scoreCV, scoreLabel } from './score.js';
 import { clearCV, loadCV, saveCV } from './storage.js';
@@ -38,7 +37,6 @@ const LISTS = {
   languages: { create: createLanguage, label: 'Idioma', removed: 'Idioma eliminado' },
 };
 const THEME_KEY = 'cv-generator:theme';
-const OFFER_KEY = 'cv-generator:offer';
 const MAX_IMPORT_BYTES = 1_000_000;
 
 let cv = loadCV() ?? createEmptyCV();
@@ -102,31 +100,6 @@ const renderPageCount = debounce(() => {
   slot.classList.toggle('is-warning', pages > MAX_PAGES);
 }, 300);
 
-const renderOffer = debounce(() => {
-  const offer = $('#offer-input').value;
-  const result = $('#offer-result');
-  if (!offer.trim()) {
-    result.replaceChildren();
-    return;
-  }
-  const { found, missing, percent } = compareWithOffer(cv, offer);
-  const total = found.length + missing.length;
-  if (total === 0) {
-    result.replaceChildren(el('p', { class: 'field__hint' }, 'No se encontraron palabras clave en ese texto.'));
-    return;
-  }
-  const chips = (words, type) => el('ul', { class: `chips chips--${type}` }, words.map((word) => el('li', { class: 'chip' }, word)));
-  result.replaceChildren(
-    el('p', { class: 'offer-card__score' }, `Tu CV incluye ${found.length} de ${total} palabras clave (${percent} %).`),
-    missing.length > 0 && el('p', { class: 'offer-card__label' }, 'Faltan'),
-    missing.length > 0 && chips(missing, 'missing'),
-    missing.length > 0 &&
-      el('p', { class: 'field__hint' }, 'Añade solo las que de verdad tengas, mejor dentro de tus logros que sueltas en una lista.'),
-    found.length > 0 && el('p', { class: 'offer-card__label' }, 'Ya incluye'),
-    found.length > 0 && chips(found, 'found'),
-  );
-}, 250);
-
 const persist = debounce(() => {
   if (!saveCV(cv)) toast('No se pudo guardar en este navegador (almacenamiento bloqueado).', 'error');
 }, 400);
@@ -184,7 +157,6 @@ function update() {
   $('#summary-count').textContent = cv.summary.trim().length;
   schedulePreview();
   renderPageCount();
-  renderOffer();
   persist();
 }
 
@@ -445,25 +417,6 @@ document.addEventListener('keydown', (event) => {
   if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'p') {
     event.preventDefault();
     printCV();
-  }
-});
-
-/* ---------- Comparar con una oferta ---------- */
-
-// La oferta se guarda aparte del CV: no forma parte del JSON exportado ni se borra al reiniciar.
-try {
-  $('#offer-input').value = localStorage.getItem(OFFER_KEY) ?? '';
-  if ($('#offer-input').value) $('#offer-card').open = true;
-} catch {
-  // Sin almacenamiento la comparación funciona igual; solo no se recuerda el texto.
-}
-
-$('#offer-input').addEventListener('input', (event) => {
-  renderOffer();
-  try {
-    localStorage.setItem(OFFER_KEY, event.target.value);
-  } catch {
-    // Igual que arriba: no es crítico.
   }
 });
 

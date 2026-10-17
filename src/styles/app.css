@@ -588,77 +588,6 @@ input[type='color'] {
   color: var(--danger);
 }
 
-/* ---------- Comparar con una oferta ---------- */
-
-.offer-card {
-  padding: 0;
-}
-
-.offer-card__summary {
-  padding: 14px 16px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.offer-card__body {
-  display: grid;
-  gap: 10px;
-  padding: 0 16px 16px;
-}
-
-.offer-card__body .field__hint {
-  margin: 0;
-}
-
-.offer-card textarea {
-  width: 100%;
-  min-height: 110px;
-  padding: 9px 11px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  resize: vertical;
-}
-
-.offer-card__result {
-  display: grid;
-  gap: 6px;
-}
-
-.offer-card__result:empty {
-  display: none;
-}
-
-.offer-card__score {
-  margin: 0;
-  font-weight: 650;
-}
-
-.offer-card__label {
-  margin: 6px 0 0;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.offer-card .chips {
-  margin: 0;
-}
-
-.offer-card .chip {
-  padding: 3px 11px;
-}
-
-.chips--missing .chip {
-  background: var(--danger-soft);
-}
-
-.chips--found .chip {
-  background: var(--primary-soft);
-}
-
 /* ---------- Vista previa ---------- */
 
 .preview-toolbar {
@@ -928,7 +857,6 @@ input[type='color'] {
   .editor,
   .preview-toolbar,
   .score-card,
-  .offer-card,
   .cv-measure,
   .toast {
     display: none !important;
