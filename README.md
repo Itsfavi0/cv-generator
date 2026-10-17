@@ -8,7 +8,7 @@
 
 **Escribe tu currículum una vez, míralo en vivo con cuatro diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
 
-**🔗 [Ver demo en vivo](https://cv-generator-beryl-two.vercel.app/)** · [Notas de la versión 1.1.0](CHANGELOG.md)
+**🔗 [Ver demo en vivo](https://cv-generator-beryl-two.vercel.app/)** · [Notas de la versión 1.2.0](CHANGELOG.md)
 
 ![Editor a la izquierda y vista previa del CV de ejemplo con la plantilla Moderna a la derecha](docs/screenshot.png)
 
@@ -20,7 +20,7 @@
 - **Validación amable**: los errores aparecen al salir del campo, no mientras escribes. Nombre y email obligatorios; teléfono, LinkedIn, web y fechas se comprueban.
 - **Aviso de longitud**: cuenta las páginas A4 que ocupará el PDF y avisa si pasa de 2, el máximo habitual en procesos de selección.
 - **Exportar a PDF** con la impresión nativa del navegador, en A4 y sin márgenes. El texto se puede seleccionar y copiar. `Ctrl+P` también pasa por la validación antes de imprimir.
-- **Experiencia, proyectos y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. En experiencia y proyectos, **cada línea de logros es una viñeta** (con o sin guion) y bajo el campo se ve cuántas hay y qué mejorar.
+- **Experiencia, proyectos y educación** con varias entradas que se pueden reordenar (↑ ↓) y eliminar, con opción de **Deshacer**. Una casilla marca el trabajo o los estudios en curso y muestra «Actualidad» en el CV. En experiencia y proyectos, **cada línea de logros es una viñeta** (con o sin guion) y bajo el campo se ve cuántas hay y qué mejorar.
 - **Habilidades en dos grupos**, técnicas/herramientas y blandas (opcionales, máx. 6), como etiquetas: Enter para añadir, varias a la vez separadas por comas y sin duplicados entre grupos.
 - **Proyectos** como sección opcional (nombre, enlace, tecnologías, fechas y logros), pensada para perfiles junior.
 - **LinkedIn** en su propio campo, separado de la web o el portafolio.
