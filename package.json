@@ -1,7 +1,7 @@
 {
   "name": "cv-generator",
   "version": "1.0.0",
-  "description": "Generador de currículums con vista previa en vivo, plantillas, puntaje y exportación a PDF. JavaScript puro, sin dependencias.",
+  "description": "Perfila: generador de currículums con vista previa en vivo, plantillas, puntaje y exportación a PDF. JavaScript puro, sin dependencias.",
   "type": "module",
   "private": true,
   "scripts": {

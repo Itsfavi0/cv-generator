@@ -1,4 +1,10 @@
-# Generador de CV
+<img src="favicon.svg" alt="" width="56" height="56" align="left" />
+
+# Perfila
+
+*Generador de CV · tu currículum listo para ATS*
+
+<br clear="left" />
 
 **Escribe tu currículum una vez, míralo en vivo con cuatro diseños y descárgalo como un PDF con texto real, legible por los sistemas ATS.** Sin cuentas, sin servidor y sin dependencias: todo ocurre en tu navegador.
 
@@ -50,7 +56,7 @@ Abre <http://localhost:5173>. Pulsa **Cargar ejemplo** para ver un CV completo, 
 
 ## Despliegue
 
-Es un sitio 100 % estático y todas las rutas son relativas, así que funciona en cualquier hosting de archivos y también dentro de una subcarpeta. Solo hacen falta `index.html` y `src/`; `tests/`, `scripts/` y `package.json` son para desarrollo.
+Es un sitio 100 % estático y todas las rutas son relativas, así que funciona en cualquier hosting de archivos y también dentro de una subcarpeta. Solo hacen falta `index.html`, `favicon.svg` y `src/`; `tests/`, `scripts/` y `package.json` son para desarrollo.
 
 La demo está publicada en **[Vercel](https://cv-generator-beryl-two.vercel.app/)**. No necesita comando de build: el directorio de salida es la raíz del repositorio.
 
@@ -69,6 +75,7 @@ Hay 51 pruebas sobre la lógica pura: formato de fechas y URLs, validación, pun
 ```
 cv-generator/
 ├── index.html             # Formulario, barra de vista previa y plantillas <template>
+├── favicon.svg            # Logo de Perfila (también va en línea en la barra superior)
 ├── src/
 │   ├── js/
 │   │   ├── app.js         # Estado, eventos, toasts, importar/exportar, tema e impresión

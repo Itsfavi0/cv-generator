@@ -40,5 +40,5 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Generador de CV disponible en http://localhost:${PORT}`);
+  console.log(`Perfila disponible en http://localhost:${PORT}`);
 });

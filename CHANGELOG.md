@@ -7,6 +7,7 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ### Añadido
 
+- Nuevo nombre, **Perfila**, con logo propio (monograma P) en la barra superior y como favicon.
 - Sección opcional de **Certificaciones**: nombre, entidad emisora, fecha y enlace a la credencial (el nombre enlaza a ella en el PDF).
 - Sección opcional de **Idiomas** con niveles de una lista cerrada (Nativo y C2–A1 del MCER).
 - **Habilidades en dos grupos**: técnicas/herramientas y blandas (opcionales, máx. 6), con subtítulos en el CV solo cuando hay de los dos tipos.

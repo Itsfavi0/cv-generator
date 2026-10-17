@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Generador de CV</title>
-    <meta name="description" content="Crea tu currículum con vista previa en vivo, plantillas y exportación a PDF." />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>" />
+    <title>Perfila · Tu CV listo para ATS</title>
+    <meta name="description" content="Perfila: crea tu currículum con vista previa en vivo, plantillas profesionales y un PDF con texto real, legible por los sistemas ATS." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <script>
       // Aplica el tema antes de pintar para evitar un parpadeo.
       try {
@@ -20,8 +20,13 @@
   <body>
     <header class="topbar">
       <div class="brand">
-        <span class="brand__logo" aria-hidden="true">CV</span>
-        <span class="brand__name">Generador de CV</span>
+        <!-- Logo: una P geométrica con un renglón al pie, como la primera línea de un CV. Igual que favicon.svg. -->
+        <svg class="brand__logo" viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#2b4acb" />
+          <path d="M23 50V14h11a11 11 0 0 1 0 22H23" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round" />
+          <rect x="34" y="44" width="12" height="6" rx="3" fill="#9fb3ff" />
+        </svg>
+        <span class="brand__name">Perfila</span>
       </div>
       <nav class="topbar__actions" aria-label="Acciones">
         <button type="button" class="btn btn--ghost" id="btn-sample">Cargar ejemplo</button>
