@@ -36,6 +36,22 @@
   min-width: 0;
 }
 
+/* Copia fuera de pantalla a ancho A4 para contar páginas (ver renderPageCount en app.js).
+   Sin el "puntal" de alto mínimo, su altura es la del contenido real. */
+.cv-measure {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  width: 210mm;
+  max-width: none;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.cv-measure::before {
+  display: none;
+}
+
 /* ---------- Base común ---------- */
 
 .cv {
@@ -119,7 +135,26 @@
   color: var(--cv-accent);
 }
 
+/* Al imprimir, una entrada corta no se parte entre páginas. Una con viñetas sí puede partirse
+   (si no, una entrada larga saltaría entera y dejaría media página en blanco), pero nunca
+   entre su encabezado y la primera viñeta, ni a mitad de una viñeta. */
 .cv__entry {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.cv__entry:has(.cv__bullets) {
+  break-inside: auto;
+  page-break-inside: auto;
+}
+
+.cv__entry-head,
+.cv__entry-sub {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.cv__bullets li {
   break-inside: avoid;
   page-break-inside: avoid;
 }
@@ -560,5 +595,16 @@
   .cv__section-title {
     break-after: avoid;
     page-break-after: avoid;
+  }
+
+  /* @page no tiene margen (para que los fondos de color lleguen al borde), así que el margen
+     lo pone el relleno de cada plantilla. "clone" lo repite en cada página: sin esto, la
+     página 2 empezaba pegada al borde superior. */
+  .cv,
+  .cv--modern .cv__main,
+  .cv--modern .cv__aside,
+  .cv--executive .cv__body {
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 }
