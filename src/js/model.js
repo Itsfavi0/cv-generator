@@ -61,6 +61,7 @@ export function createEducation(data = {}) {
     institution: '',
     start: '',
     end: '',
+    current: false,
     ...data,
   };
 }
@@ -177,6 +178,7 @@ export function normalizeCV(raw) {
         institution: str(item.institution),
         start: month(item.start),
         end: month(item.end),
+        current: item.current === true,
       }),
     );
 

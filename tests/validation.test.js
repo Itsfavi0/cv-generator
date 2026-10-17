@@ -90,6 +90,12 @@ test('educación: título e institución obligatorios y fechas coherentes', () =
   ]);
 });
 
+test('educación en curso ignora la fecha de fin', () => {
+  const cv = validCV();
+  cv.education.push(createEducation({ degree: 'Ing. de Software', institution: 'UNI', start: '2020-03', end: '2019-12', current: true }));
+  assert.deepEqual(validateCV(cv), {});
+});
+
 test('certificación: nombre obligatorio y enlace válido si se indica', () => {
   const cv = validCV();
   const cert = createCertification({ url: 'javascript:alert(1)' });

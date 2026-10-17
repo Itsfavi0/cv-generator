@@ -82,7 +82,7 @@ function projectItem(item) {
 }
 
 function educationItem(item) {
-  const range = formatRange(item.start, item.end);
+  const range = formatRange(item.start, item.end, item.current);
   return el(
     'article',
     { class: 'cv__entry' },

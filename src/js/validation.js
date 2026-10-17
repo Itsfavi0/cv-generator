@@ -80,7 +80,7 @@ export function validateCV(cv) {
     const key = `education.${item.id}`;
     if (blank(item.degree)) errors[`${key}.degree`] = 'Indica el título o carrera.';
     if (blank(item.institution)) errors[`${key}.institution`] = 'Indica la institución.';
-    if (item.start && item.end && item.end < item.start) {
+    if (!item.current && item.start && item.end && item.end < item.start) {
       errors[`${key}.end`] = 'La fecha de fin no puede ser anterior al inicio.';
     }
   }
