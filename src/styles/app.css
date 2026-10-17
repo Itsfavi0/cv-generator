@@ -588,6 +588,31 @@ input[type='color'] {
   color: var(--danger);
 }
 
+/* ---------- Pie de página ---------- */
+
+.site-footer {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 8px 24px 28px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 2px 0;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.site-footer a:hover {
+  color: var(--primary);
+}
+
 /* ---------- Vista previa ---------- */
 
 .preview-toolbar {
@@ -857,6 +882,7 @@ input[type='color'] {
   .editor,
   .preview-toolbar,
   .score-card,
+  .site-footer,
   .cv-measure,
   .toast {
     display: none !important;
