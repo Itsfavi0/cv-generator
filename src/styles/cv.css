@@ -276,6 +276,28 @@
   letter-spacing: 0.04em;
 }
 
+/* Clásica y Minimalista: habilidades en una línea de texto separada por "·", sin recuadros.
+   Pesa menos a la vista y para un ATS es exactamente igual. */
+.cv--classic .cv__skills,
+.cv--minimal .cv__skills {
+  gap: 0;
+}
+
+.cv--classic .cv__skills li,
+.cv--minimal .cv__skills li {
+  padding: 0;
+  border: 0;
+  font-size: 10pt;
+}
+
+.cv--classic .cv__skills li + li::before,
+.cv--minimal .cv__skills li + li::before {
+  content: '·';
+  margin: 0 7pt;
+  color: var(--cv-accent);
+  font-weight: 700;
+}
+
 /* ---------- Moderna: encabezado a todo el ancho y barra lateral de color ---------- */
 
 .cv--modern {
@@ -390,15 +412,6 @@
   color: var(--cv-muted);
 }
 
-.cv--minimal .cv__skills {
-  gap: 0;
-}
-
-.cv--minimal .cv__skills li {
-  padding: 0;
-  border: 0;
-  font-size: 10pt;
-}
 
 .cv--minimal .cv__languages {
   flex-direction: row;
@@ -407,7 +420,6 @@
   font-size: 10pt;
 }
 
-.cv--minimal .cv__skills li + li::before,
 .cv--minimal .cv__languages li + li::before {
   content: '·';
   margin: 0 7pt;
