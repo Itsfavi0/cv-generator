@@ -225,6 +225,32 @@ abbr[title] {
   margin: 0 0 12px;
 }
 
+/* Sección opcional sin entradas: una sola línea con el título y el botón, para que el
+   formulario no parezca más largo de lo que es. Al añadir la primera entrada se despliega. */
+.card--optional:has(.entries:empty) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding-block: 12px;
+}
+
+.card--optional:has(.entries:empty) .card__title {
+  width: auto;
+  margin: 0;
+}
+
+.card--optional:has(.entries:empty) :is(.card__intro, .entries) {
+  display: none;
+}
+
+/* margin-left: auto lo mantiene a la derecha también cuando pasa a su propia línea en móvil. */
+.card--optional:has(.entries:empty) .btn--dashed {
+  width: auto;
+  margin: 0 0 0 auto;
+}
+
 .card__optional {
   margin-left: 6px;
   font-size: 11px;

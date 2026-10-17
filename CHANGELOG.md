@@ -25,6 +25,8 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 - Los CV guardados o exportados con la v1.0.0 se siguen cargando: sus habilidades pasan a "técnicas".
 - La plantilla Minimalista tiene márgenes, espacios e interlineado algo menores, para que el ejemplo quepa en una página.
 - El criterio de puntaje de ciudad y enlace acepta LinkedIn o web.
+- En la plantilla Clásica, las habilidades son texto separado por "·" en vez de recuadros.
+- En el editor, las secciones opcionales vacías (Proyectos, Certificaciones, Idiomas) ocupan una sola línea con su botón "Añadir" y se despliegan al añadir la primera entrada.
 
 ### Corregido
 
