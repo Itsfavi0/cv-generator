@@ -54,7 +54,8 @@ function toast(message, type = 'info', action = null) {
     action.onClick();
   };
   const button = action && el('button', { type: 'button', class: 'toast__action', onClick }, action.label);
-  toastEl.replaceChildren(el('span', {}, message), button);
+  // replaceChildren convierte null en el texto "null", por eso el botón solo se pasa si existe.
+  toastEl.replaceChildren(el('span', {}, message), ...(button ? [button] : []));
   toastEl.dataset.type = type;
   toastEl.classList.add('is-visible');
   clearTimeout(toastTimer);
